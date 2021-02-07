@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:solucion/globals.dart' as globals;
+import 'package:solucion/models/globals.dart' as globals;
 
 class SignUp extends StatefulWidget {
   @override
@@ -67,6 +67,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   void valadateAndSave() async {
+    FocusScope.of(context).unfocus();
     if (validateAndSave()) {
       try {
         UserCredential result = await FirebaseAuth.instance

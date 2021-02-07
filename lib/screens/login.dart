@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
-import 'package:solucion/globals.dart' as globals;
+import 'package:solucion/models/globals.dart' as globals;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<User> _validateAndSubmit() async {
+    FocusScope.of(context).unfocus();
     if (validateAndSave()) {
       try {
         CircularProgressIndicator();
@@ -231,8 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                                             color: Colors.black,
                                           ),
                                           onPressed: () => _validateAndSubmit()
-                                              .then((User user) =>
-                                                  print(user))
+                                              .then((User user) => print(user))
                                               .catchError((e) => print(e)),
                                         ),
                                       ),

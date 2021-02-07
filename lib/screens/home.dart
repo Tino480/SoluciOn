@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:solucion/globals.dart' as globals;
-import 'package:solucion/drawer.dart';
+import 'package:solucion/models/globals.dart' as globals;
+import 'package:solucion/components/drawer.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage();
@@ -60,9 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('Users')
-                  .snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('Users').snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
@@ -122,7 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     globals.toUid = toUid;
                                     globals.getToData();
                                     globals.checkCombined();
-                                    Navigator.of(context).popAndPushNamed('/Chat');
+                                    Navigator.of(context)
+                                        .popAndPushNamed('/Chat');
                                   },
                                   child: const Text('Chat'),
                                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:solucion/globals.dart' as globals;
+import 'package:solucion/models/globals.dart' as globals;
 
 class MyDrawer extends StatelessWidget {
   @override

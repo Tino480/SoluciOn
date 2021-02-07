@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:solucion/services/auth.dart' as auth;
+import 'package:solucion/models/globals.dart' as globals;
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:solucion/globals.dart' as globals;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,17 +12,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((firebaseUser) {
-      if (firebaseUser == null) {
-        Timer(Duration(seconds: 2),
-            () => Navigator.popAndPushNamed(context, '/Login'));
-      } else {
-        globals.getData();
-        Timer(Duration(seconds: 2),
-            () => Navigator.popAndPushNamed(context, '/Home'));
-      }
-      // do whatever you want based on the firebaseUser state
-    });
+    if (auth.checkIfLogedIn() == true) {
+      globals.getData();
+      Timer(Duration(seconds: 2),
+          () => Navigator.popAndPushNamed(context, '/Home'));
+    } else {
+      Timer(Duration(seconds: 2),
+          () => Navigator.popAndPushNamed(context, '/Login'));
+    }
   }
 
   @override

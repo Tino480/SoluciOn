@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:solucion/login.dart';
-import 'package:solucion/userSignUp.dart';
-import 'package:solucion/splash.dart';
-import 'package:solucion/myHomePage.dart';
-import 'package:solucion/chat.dart';
+import 'package:solucion/routes.dart';
 
-Future <void> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -16,19 +12,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Solucion App',
+      title: 'SoluciOn App',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primaryColor: Colors.red,
+        accentColor: Colors.redAccent,
+        brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Georgia',
       ),
-      routes: <String, WidgetBuilder>{
-        '/Splash': (BuildContext context) => SplashScreen(),
-        '/Login': (BuildContext context) => LoginPage(),
-        '/Signup': (BuildContext context) => SignUp(),
-        '/Home': (BuildContext context) => MyHomePage(),
-        '/Chat': (BuildContext context) => Chat(),
-      },
-      home: SplashScreen(),
+      routes: routes,
+      initialRoute: '/Splash',
     );
   }
 }

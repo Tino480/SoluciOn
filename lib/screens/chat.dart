@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:solucion/globals.dart' as globals;
+import 'package:solucion/components/drawer.dart';
+import 'package:solucion/models/globals.dart' as globals;
 
 class Chat extends StatefulWidget {
   static const String id = "CHAT";
@@ -41,8 +42,25 @@ class _ChatState extends State<Chat> {
     globals.checkCombined();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Solucion Chat"),
+        title: Text("SoluciOn Chat"),
+        centerTitle: true,
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: GestureDetector(
+                  child: Icon(Icons.home, size: 30.0),
+                  onTap: () {
+                    Navigator.of(context).popAndPushNamed('/Home');
+                  },
+                ),
+              )
+            ],
+          ),
+        ],
       ),
+      drawer: MyDrawer(),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
