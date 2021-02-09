@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:solucion/routes.dart';
+import 'package:solucion/theme/style.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,13 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SoluciOn App',
-      theme: ThemeData(
-        primaryColor: Colors.red,
-        accentColor: Colors.redAccent,
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: 'Georgia',
-      ),
+      theme: appTheme,
       routes: routes,
       initialRoute: '/Splash',
     );

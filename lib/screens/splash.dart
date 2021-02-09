@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:solucion/services/auth.dart' as auth;
-import 'package:solucion/models/globals.dart' as globals;
 import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
@@ -13,7 +12,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     if (auth.checkIfLogedIn() == true) {
-      globals.getData();
       Timer(Duration(seconds: 2),
           () => Navigator.popAndPushNamed(context, '/Home'));
     } else {

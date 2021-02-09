@@ -49,16 +49,14 @@ class MyDrawer extends StatelessWidget {
                                 trailing: IconButton(
                                   icon: Icon(Icons.delete_forever),
                                   onPressed: () {
-                                    globals.toUid = toUid;
-                                    globals.getToData();
-                                    globals.checkCombined();
+                                    globals.getToData(toUid);
+                                    globals.checkIfOngoing();
                                     globals.deleteConversation();
                                   },
                                 ),
                                 onTap: () {
-                                  globals.toUid = toUid;
-                                  globals.getToData();
-                                  globals.checkCombined();
+                                  globals.getToData(toUid);
+                                  globals.checkIfOngoing();
                                   Navigator.of(context).pushNamed('/Chat');
                                 },
                               ),

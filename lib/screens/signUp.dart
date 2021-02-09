@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:solucion/models/globals.dart' as globals;
+import 'package:solucion/services/auth.dart' as auth;
+import 'package:solucion/components/clipper.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -11,7 +10,6 @@ class SignUp extends StatefulWidget {
 enum FormType { login, register }
 
 class _SignUpState extends State<SignUp> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _forKey = GlobalKey<FormState>();
 
   String _email;
@@ -66,31 +64,7 @@ class _SignUpState extends State<SignUp> {
     return false;
   }
 
-  void valadateAndSave() async {
-    FocusScope.of(context).unfocus();
-    if (validateAndSave()) {
-      try {
-        UserCredential result = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: _email, password: _password);
-        User user = result.user;
-        FirebaseFirestore.instance.collection('Users').doc().set({
-          'User': user.uid,
-          'Email': _email,
-          'First': _name,
-          'Last': _lastName,
-          'State': _state,
-          'City': _city,
-          'Blood Type': _bloodType,
-        });
-        globals.getData();
-        Navigator.popAndPushNamed(context, '/Home');
-      } catch (e) {
-        print('Error: $e');
-      }
-    }
-  }
-
-  void login() async {
+  login() async {
     Navigator.popAndPushNamed(context, '/Login');
   }
 
@@ -528,13 +502,31 @@ class _SignUpState extends State<SignUp> {
                                         Icons.check,
                                         color: Colors.black,
                                       ),
-                                      onPressed: valadateAndSave,
+                                      onPressed: () => auth.createUserAndLogIn(
+                                          context,
+                                          validateAndSave(),
+                                          _email,
+                                          _password,
+                                          _name,
+                                          _lastName,
+                                          _state,
+                                          _city,
+                                          _bloodType),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            onPressed: valadateAndSave,
+                            onPressed: () => auth.createUserAndLogIn(
+                                context,
+                                validateAndSave(),
+                                _email,
+                                _password,
+                                _name,
+                                _lastName,
+                                _state,
+                                _city,
+                                _bloodType),
                           ),
                         ),
                       ],
@@ -570,27 +562,5 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
         ));
-  }
-}
-
-class MyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path p = Path();
-    p.lineTo(size.width, 0.0);
-    p.lineTo(size.width, size.height * 0.85);
-    p.arcToPoint(
-      Offset(0.0, size.height * 0.85),
-      radius: const Radius.elliptical(50.0, 10.0),
-      rotation: 0.0,
-    );
-    p.lineTo(0.0, 0.0);
-    p.close();
-    return p;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper oldClipper) {
-    return true;
   }
 }

@@ -14,7 +14,6 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   TextEditingController messageController = TextEditingController();
@@ -39,7 +38,6 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    globals.checkCombined();
     return Scaffold(
       appBar: AppBar(
         title: Text("SoluciOn Chat"),
@@ -158,7 +156,7 @@ class Message extends StatelessWidget {
             from,
           ),
           Material(
-            color: me ? Colors.teal : Colors.red,
+            color: me ? Colors.deepOrange : Colors.orange,
             borderRadius: BorderRadius.circular(10.0),
             elevation: 6.0,
             child: Container(

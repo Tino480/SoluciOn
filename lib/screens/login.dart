@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
-import 'package:solucion/models/globals.dart' as globals;
+import 'package:solucion/services/auth.dart' as auth;
+import 'package:solucion/components/clipper.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,7 +10,6 @@ class LoginPage extends StatefulWidget {
 enum FormType { login, register }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
 
   String _email;
@@ -24,24 +22,6 @@ class _LoginPageState extends State<LoginPage> {
       return true;
     }
     return false;
-  }
-
-  Future<User> _validateAndSubmit() async {
-    FocusScope.of(context).unfocus();
-    if (validateAndSave()) {
-      try {
-        CircularProgressIndicator();
-        UserCredential result = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _email, password: _password);
-        User user = result.user;
-        print('signed in: ${user.uid}');
-        print("User Name: ${user.displayName}");
-        globals.getData();
-        Navigator.popAndPushNamed(context, '/Home');
-      } catch (e) {
-        print('Error: $e');
-      }
-    }
   }
 
   void signUp() async {
@@ -231,17 +211,19 @@ class _LoginPageState extends State<LoginPage> {
                                             Icons.check,
                                             color: Colors.black,
                                           ),
-                                          onPressed: () => _validateAndSubmit()
-                                              .then((User user) => print(user))
-                                              .catchError((e) => print(e)),
+                                          onPressed: () =>
+                                              auth.login(
+                                                  context,
+                                                  validateAndSave(),
+                                                  _email,
+                                                  _password),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                onPressed: () => _validateAndSubmit()
-                                    .then((User user) => print(user))
-                                    .catchError((e) => print(e)),
+                                onPressed: () => auth.login(context,
+                                    validateAndSave(), _email, _password),
                               ),
                             ),
                           ],
@@ -277,27 +259,5 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             )));
-  }
-}
-
-class MyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path p = Path();
-    p.lineTo(size.width, 0.0);
-    p.lineTo(size.width, size.height * 0.85);
-    p.arcToPoint(
-      Offset(0.0, size.height * 0.85),
-      radius: const Radius.elliptical(50.0, 10.0),
-      rotation: 0.0,
-    );
-    p.lineTo(0.0, 0.0);
-    p.close();
-    return p;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper oldClipper) {
-    return true;
   }
 }

@@ -12,7 +12,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<Null> _signOut() async {
+  _signOut() async {
     await FirebaseAuth.instance.signOut();
     Navigator.popAndPushNamed(context, '/Splash');
   }
@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   FirebaseFirestore.instance.collection('Users').snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
+                globals.getContacts();
                 if (!snapshot.hasData) {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -71,8 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
                 for (int ctr = 0; ctr < snapshot.data.docs.length; ctr++) {
                   String user = snapshot.data.docs[ctr]['User'];
+                  globals.getToData(user);
                   if (user == globals.uid) {
-                  } else if (globals.checkIfOngoing(user) == true) {
+                  } else if (globals.userContacts.contains(user)) {
                   } else if (snapshot.data.docs[ctr]['State'] !=
                       globals.state) {
                   } else if (bloodCompatability[globals.bloodType]
@@ -80,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     filtered.add(ctr);
                   }
                 }
-
                 return ListView.builder(
                     itemCount: filtered.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -117,10 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   textColor: Colors.black,
                                   splashColor: Colors.red,
                                   onPressed: () {
-                                    globals.getData();
-                                    globals.toUid = toUid;
-                                    globals.getToData();
-                                    globals.checkCombined();
+                                    globals.createChat(toUid);
                                     Navigator.of(context)
                                         .popAndPushNamed('/Chat');
                                   },
