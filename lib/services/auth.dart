@@ -18,39 +18,51 @@ login(context, save, _email, _password) async {
   FocusScope.of(context).unfocus();
   if (save == true) {
     try {
-      CircularProgressIndicator();
+      const CircularProgressIndicator();
       UserCredential result = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _email, password: _password);
-      User user = result.user;
-      globals.getData(user);
-      Navigator.popAndPushNamed(context, '/Home');
+      if (result.user.emailVerified) {
+        User user = result.user;
+        globals.getData(user);
+        Navigator.popAndPushNamed(context, '/Home');
+      }
+      else{
+        // todo popup need to verify email
+      }
     } catch (e) {
       print('Error: $e');
     }
   }
 }
 
-createUserAndLogIn(context, save, _email, _password, _name, _lastName, _state,
-    _city, _bloodType) async {
+createUserAndLogIn(context, save, _email, _password, _name, _state,
+    _municipality, _bloodType) async {
   FocusScope.of(context).unfocus();
   if (save == true) {
     try {
+      const CircularProgressIndicator();
       UserCredential result = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email, password: _password);
-      User user = result.user;
+      await result.user.sendEmailVerification();
       await FirebaseFirestore.instance.collection('Users').doc().set({
-        'User': user.uid,
+        'User': result.user.uid,
         'Email': _email,
-        'First': _name,
-        'Last': _lastName,
+        'Name': _name,
         'State': _state,
-        'City': _city,
+        'Municipality': _municipality,
         'Blood Type': _bloodType,
       });
-      globals.getData(user);
-      Navigator.popAndPushNamed(context, '/Home');
     } catch (e) {
       print('Error: $e');
     }
+  }
+}
+
+@override
+Future<void> resetPassword(context, save, email) async {
+  FocusScope.of(context).unfocus();
+  const CircularProgressIndicator();
+  if (save == true) {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 }

@@ -21,7 +21,7 @@ class _ChatState extends State<Chat> {
 
   Future<void> callback() async {
     if (messageController.text.length > 0) {
-      await _firestore.collection('messages').add({
+      await _firestore.collection('Messages').add({
         'text': messageController.text,
         'from': globals.userName,
         'combined uid': globals.combined,
@@ -40,15 +40,15 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SoluciOn Chat"),
+        title: const Text("SoluciOn Chat"),
         centerTitle: true,
         actions: <Widget>[
           Row(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: GestureDetector(
-                  child: Icon(Icons.home, size: 30.0),
+                  child: const Icon(Icons.home, size: 30.0),
                   onTap: () {
                     Navigator.of(context).popAndPushNamed('/Home');
                   },
@@ -66,14 +66,14 @@ class _ChatState extends State<Chat> {
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: _firestore
-                    .collection('messages')
+                    .collection('Messages')
                     .orderBy('date')
                     .where('combined uid', isEqualTo: globals.combined)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: const CircularProgressIndicator(),
                     );
 
                   List<DocumentSnapshot> docs = snapshot.data.docs;
@@ -101,7 +101,7 @@ class _ChatState extends State<Chat> {
                   Expanded(
                     child: TextField(
                       onSubmitted: (value) => callback(),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Escribe tu Mensaje...",
                         border: const OutlineInputBorder(),
                       ),

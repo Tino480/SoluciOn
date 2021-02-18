@@ -12,9 +12,9 @@ class MyDrawer extends StatelessWidget {
             Container(
               height: 80,
               child: DrawerHeader(
-                child: Text(
+                child: const Text(
                   'Conversaciones',
-                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  style: const TextStyle(color: Colors.white, fontSize: 30),
                 ),
                 decoration: BoxDecoration(color: Colors.red),
               ),
@@ -47,7 +47,7 @@ class MyDrawer extends StatelessWidget {
                               ListTile(
                                 title: Text('$contact'),
                                 trailing: IconButton(
-                                  icon: Icon(Icons.delete_forever),
+                                  icon: const Icon(Icons.delete_forever),
                                   onPressed: () {
                                     globals.getToData(toUid);
                                     globals.checkIfOngoing();

@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   var filtered = List();
-  var bloodCompatability = <String, List>{
+  static const bloodCompatability = <String, List>{
     'O-': ['O-'],
     'O+': ['O-', 'O+'],
     'A-': ['A-', 'O-'],
@@ -33,15 +33,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SoluciOn'),
+        title: const Text('SoluciOn'),
         centerTitle: true,
         actions: <Widget>[
           Row(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: GestureDetector(
-                  child: Icon(Icons.exit_to_app, size: 30.0),
+                  child: const Icon(Icons.exit_to_app, size: 30.0),
                   onTap: () {
                     _signOut();
                   },
@@ -53,9 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       drawer: MyDrawer(),
       body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/logo_solucion.png"),
+          decoration: const BoxDecoration(
+            image: const DecorationImage(
+              image: const AssetImage("assets/logo_solucion.png"),
               fit: BoxFit.cover,
             ),
           ),
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 globals.getContacts();
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   );
                 }
                 for (int ctr = 0; ctr < snapshot.data.docs.length; ctr++) {
@@ -86,9 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     itemCount: filtered.length,
                     itemBuilder: (BuildContext context, int index) {
                       int newindex = filtered[index];
-                      String first = snapshot.data.docs[newindex]['First'];
-                      String city = snapshot.data.docs[newindex]['City'];
-                      String last = snapshot.data.docs[newindex]['Last'];
+                      String name = snapshot.data.docs[newindex]['Name'];
+                      String municipality = snapshot.data.docs[newindex]['Municipality'];
                       String toUid = snapshot.data.docs[newindex]['User'];
                       return Card(
                         color: Colors.transparent,
@@ -96,17 +95,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Column(
                           children: [
                             ListTile(
-                              title: Text('$first'),
-                              subtitle: Text(
-                                '$last',
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.6)),
-                              ),
+                              title: Text('$name'),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
-                                '$city',
+                                '$municipality',
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(0.6)),
                               ),
