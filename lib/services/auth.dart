@@ -1,68 +1,47 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:solucion/models/globals.dart' as globals;
+import 'package:flutter/material.dart';
 
-checkIfLogedIn() async {
-  FirebaseAuth.instance.authStateChanges().listen((firebaseUser) {
-    if (firebaseUser == null) {
-      return false;
-    } else {
-      globals.getData(firebaseUser);
-      return true;
-    }
-  });
-}
+class AuthenticationService {
+  final FirebaseAuth _firebaseAuth;
+  AuthenticationService(this._firebaseAuth);
 
-login(context, save, _email, _password) async {
-  FocusScope.of(context).unfocus();
-  if (save == true) {
+  Stream<User> get authStateChange => _firebaseAuth.authStateChanges();
+
+  Future<bool> login({String email, String password}) async {
+    bool logedIn;
     try {
-      const CircularProgressIndicator();
-      UserCredential result = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: _email, password: _password);
-      if (result.user.emailVerified) {
-        User user = result.user;
-        globals.getData(user);
-        Navigator.popAndPushNamed(context, '/Home');
-      }
-      else{
-        // todo popup need to verify email
-      }
-    } catch (e) {
-      print('Error: $e');
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      logedIn = true;
+    } on FirebaseAuthException catch (e) {
+      logedIn = false;
     }
+    return logedIn;
   }
-}
 
-createUserAndLogIn(context, save, _email, _password, _name, _state,
-    _municipality, _bloodType) async {
-  FocusScope.of(context).unfocus();
-  if (save == true) {
+  Future<bool> signUp({String email, String password}) async {
+    bool signedUp;
     try {
-      const CircularProgressIndicator();
-      UserCredential result = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email, password: _password);
-      await result.user.sendEmailVerification();
-      await FirebaseFirestore.instance.collection('Users').doc().set({
-        'User': result.user.uid,
-        'Email': _email,
-        'Name': _name,
-        'State': _state,
-        'Municipality': _municipality,
-        'Blood Type': _bloodType,
-      });
-    } catch (e) {
-      print('Error: $e');
+      await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await _firebaseAuth.currentUser.sendEmailVerification();
+      signedUp = true;
+    } on FirebaseAuthException catch (e) {
+      signedUp = false;
     }
+    return signedUp;
   }
-}
 
-@override
-Future<void> resetPassword(context, save, email) async {
-  FocusScope.of(context).unfocus();
-  const CircularProgressIndicator();
-  if (save == true) {
-    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  Future<void> signOut(context) async {
+    await _firebaseAuth.signOut();
+    Navigator.popAndPushNamed(context, '/Splash');
+  }
+
+  Future<void> resetPassword({String email}) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }

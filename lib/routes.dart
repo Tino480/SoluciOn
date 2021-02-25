@@ -1,16 +1,16 @@
 import 'package:flutter/widgets.dart';
-import 'package:solucion/screens/login.dart';
-import 'package:solucion/screens/signUp.dart';
-import 'package:solucion/screens/splash.dart';
-import 'package:solucion/screens/home.dart';
-import 'package:solucion/screens/chat.dart';
-import 'package:solucion/screens/recover.dart';
+import 'package:solucion/views/login.dart';
+import 'package:solucion/views/signup.dart';
+import 'package:solucion/views/splash.dart';
+import 'package:solucion/views/home.dart';
+import 'package:solucion/views/chat.dart';
+import 'package:solucion/views/recover.dart';
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-  '/Splash': (BuildContext context) => SplashScreen(),
+  '/Splash': (BuildContext context) => SplashScreenPage(),
   '/Login': (BuildContext context) => LoginPage(),
-  '/Signup': (BuildContext context) => SignUp(),
-  '/Home': (BuildContext context) => MyHomePage(),
-  '/Chat': (BuildContext context) => Chat(),
+  '/Signup': (BuildContext context) => SignUpPage(),
   '/Recover': (BuildContext context) => RecoverPage(),
+  '/Home': (BuildContext context) => HomePage(),
+  '/Chat': (BuildContext context) => ChatPage(),
 };

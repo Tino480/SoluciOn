@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:solucion/models/globals.dart' as globals;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solucion/providers/db_provider.dart';
+import 'package:solucion/models/user.dart' as UserModel;
+import 'package:solucion/components/alert.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -20,54 +22,51 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
             Container(
-                decoration: BoxDecoration(color: Colors.white),
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('Chats')
-                        .doc(globals.uid)
-                        .collection('User Chats')
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            String contact =
-                                snapshot.data.docs[index]['contact'];
-                            String toUid =
-                                snapshot.data.docs[index]['contact uid'];
-                            return Column(children: <Widget>[
-                              ListTile(
-                                title: Text('$contact'),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.delete_forever),
-                                  onPressed: () {
-                                    globals.getToData(toUid);
-                                    globals.checkIfOngoing();
-                                    globals.deleteConversation();
-                                  },
-                                ),
-                                onTap: () {
-                                  globals.getToData(toUid);
-                                  globals.checkIfOngoing();
-                                  Navigator.of(context).pushNamed('/Chat');
-                                },
-                              ),
-                              Divider(
-                                color: Colors.red,
-                                thickness: 5,
-                                height: 5,
-                              )
-                            ]);
-                          });
-                    }))
+              decoration: BoxDecoration(color: Colors.white),
+              child: Consumer(builder: (context, watch, child) {
+                final chats = watch(chatStreamProvider);
+                final _db = watch(dbServicesProvider);
+                return chats.when(
+                  data: (chat) => ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: chat.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        String contact = chat[index]['contact'];
+                        String combined = chat[index]['Combined Uid'];
+                        String toUid = chat[index]['contact uid'];
+                        return Column(children: <Widget>[
+                          ListTile(
+                            title: Text('$contact'),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete_forever),
+                              onPressed: () {
+                                _db.deleteConversation(
+                                    UserModel.uid, toUid, combined);
+                                Future.delayed(Duration(seconds: 2), () {
+                                  context.refresh(chatStreamProvider);
+                                  context.refresh(cardStreamProvider);
+                                });
+                              },
+                            ),
+                            onTap: () {
+                              UserModel.combined = combined;
+                              Navigator.of(context).popAndPushNamed('/Chat');
+                            },
+                          ),
+                          Divider(
+                            color: Colors.red,
+                            thickness: 5,
+                            height: 5,
+                          )
+                        ]);
+                      }),
+                  loading: () => Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (error, __) => showErrorDialog(context, error),
+                );
+              }),
+            ),
           ])),
     );
   }

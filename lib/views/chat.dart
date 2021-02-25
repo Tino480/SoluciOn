@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:solucion/components/drawer.dart';
-import 'package:solucion/models/globals.dart' as globals;
+import 'package:solucion/models/user.dart' as UserModel;
 
-class Chat extends StatefulWidget {
+class ChatPage extends StatefulWidget {
   static const String id = "CHAT";
   final User user;
 
-  const Chat({Key key, this.user}) : super(key: key);
+  const ChatPage({Key key, this.user}) : super(key: key);
   @override
   _ChatState createState() => _ChatState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatState extends State<ChatPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   TextEditingController messageController = TextEditingController();
@@ -23,8 +23,8 @@ class _ChatState extends State<Chat> {
     if (messageController.text.length > 0) {
       await _firestore.collection('Messages').add({
         'text': messageController.text,
-        'from': globals.userName,
-        'combined uid': globals.combined,
+        'from': UserModel.name,
+        'combined uid': UserModel.combined,
         'date': DateTime.now().toIso8601String().toString(),
       });
       messageController.clear();
@@ -68,7 +68,7 @@ class _ChatState extends State<Chat> {
                 stream: _firestore
                     .collection('Messages')
                     .orderBy('date')
-                    .where('combined uid', isEqualTo: globals.combined)
+                    .where('combined uid', isEqualTo: UserModel.combined)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
@@ -82,7 +82,7 @@ class _ChatState extends State<Chat> {
                       .map((doc) => Message(
                             from: doc['from'],
                             text: doc['text'],
-                            me: globals.userName == doc['from'],
+                            me: UserModel.name == doc['from'],
                           ))
                       .toList();
 

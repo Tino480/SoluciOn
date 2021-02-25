@@ -1,140 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:solucion/services/auth.dart' as auth;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solucion/providers/auth_provider.dart';
+import 'package:solucion/providers/db_provider.dart';
+import 'package:solucion/providers/login_page_providers.dart';
+import 'package:solucion/providers/signup_page_providers.dart';
 import 'package:solucion/components/clipper.dart';
+import 'package:solucion/components/alert.dart';
+import 'package:solucion/components/loading.dart';
 
-class SignUp extends StatefulWidget {
-  @override
-  _SignUpState createState() => _SignUpState();
-}
-
-enum FormType { login, register }
-
-class _SignUpState extends State<SignUp> {
-  final _forKey = GlobalKey<FormState>();
-
-  bool _isHidden = true;
-
-  void _togglePasswordView() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
+class SignUpPage extends ConsumerWidget {
+  void updateEmail(BuildContext context, String email) {
+    context.read(emailProvider).state = email;
   }
 
-  String _email;
-  String _password;
-  String _name;
-  static const List<String> _states = [
-    'Aguascalientes',
-    'Baja California',
-    'Baja California Sur',
-    'Campeche',
-    'Chiapas',
-    'Chihuahua',
-    'Ciudad de México',
-    'Coahuila',
-    'Colima',
-    'Durango',
-    'Estado de México',
-    'Guanajuato',
-    'Guerrero',
-    'Hidalgo',
-    'Jalisco',
-    'Michoacán',
-    'Morelos',
-    'Nayarit',
-    'Nuevo León',
-    'Oaxaca',
-    'Puebla',
-    'Querétaro',
-    'Quintana Roo',
-    'San Luis Potosí',
-    'Sinaloa',
-    'Sonora',
-    'Tabasco',
-    'Tamaulipas',
-    'Tlaxcala',
-    'Veracruz',
-    'Yucatán',
-    'Zacatecas'
-  ];
-  String _state;
-  String _municipality;
-  static const List<String> _bloodTypes = [
-    'O-',
-    'O+',
-    'A-',
-    'A+',
-    'B-',
-    'B+',
-    'AB-',
-    'AB+'
-  ];
-  String _bloodType;
-  String _confirmpass;
-
-  bool validateAndSave() {
-    final form = _forKey.currentState;
-    if (form.validate()) {
-      form.save();
-      return true;
-    }
-    return false;
+  void updatePassword(BuildContext context, String pass) {
+    context.read(passwordProvider).state = pass;
   }
 
-  Future<void> _showRegistrationDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Registro Exitoso',
-            style: const TextStyle(
-                fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Se a enviado un correo a $_email',
-                  style: const TextStyle(fontSize: 15.0, color: Colors.red),
-                ),
-                const Text(
-                  'Por favor revisa el correo y verifica tu cuenta',
-                  style: const TextStyle(fontSize: 15.0, color: Colors.red),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              color: Colors.red,
-              child: const Text(
-                'Listo! Ingresar A Mi Cuenta',
-                style: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.popAndPushNamed(context, '/Login');
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void updateName(BuildContext context, String name) {
+    context.read(nameProvider).state = name;
   }
 
-  login() async {
-    Navigator.popAndPushNamed(context, '/Login');
+  void updateState(BuildContext context, String state) {
+    context.read(stateProvider).state = state;
+  }
+
+  void updateMunicipality(BuildContext context, String municipality) {
+    context.read(municipalityProvider).state = municipality;
+  }
+
+  void updateBloodType(BuildContext context, String bloodType) {
+    context.read(bloodTypeProvider).state = bloodType;
+  }
+
+  void togglePasswordView(BuildContext context, bool togglepass) {
+    context.read(togglepasswordProvider).state = !togglepass;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-        key: _forKey,
-        child: Scaffold(
+  Widget build(BuildContext context, ScopedReader watch) {
+    final email = watch(emailProvider).state;
+    final pass = watch(passwordProvider).state;
+    final name = watch(nameProvider).state;
+    final state = watch(stateProvider).state;
+    final states = watch(statesProvider).state;
+    final municipality = watch(municipalityProvider).state;
+    final municipalities = watch(municipalitiesProvider).state;
+    final bloodType = watch(bloodTypeProvider).state;
+    final togglepass = watch(togglepasswordProvider).state;
+    final _auth = watch(authServicesProvider);
+    final _db = watch(dbServicesProvider);
+    final _authState = watch(authStateProvider);
+    List<String> _muni = ['default'];
+    return _authState.when(
+      data: (value) {
+        if (value != null) {
+          _db.createUser(
+              uid: value.uid,
+              name: name,
+              state: state,
+              municipality: municipality,
+              bloodType: bloodType,
+              compatibleBloodTypes: compatibleBloodTypes[bloodType]);
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.popAndPushNamed(context, '/Home');
+          });
+          return loading();
+        }
+        return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
             child: SingleChildScrollView(
@@ -210,15 +143,13 @@ class _SignUpState extends State<SignUp> {
                                 const EdgeInsets.only(left: 00.0, right: 10.0),
                           ),
                           Expanded(
-                            child: TextFormField(
+                            child: TextField(
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Ingresa Tu Correo Electronico',
                                 hintStyle: const TextStyle(color: Colors.grey),
                               ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Requirido' : null,
-                              onSaved: (value) => _email = value,
+                              onChanged: (value) => updateEmail(context, value),
                             ),
                           )
                         ],
@@ -260,31 +191,22 @@ class _SignUpState extends State<SignUp> {
                                 const EdgeInsets.only(left: 00.0, right: 10.0),
                           ),
                           Expanded(
-                            child: TextFormField(
+                            child: TextField(
+                              obscureText: togglepass,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Ingresa Tu Contraseña',
                                 hintStyle: const TextStyle(color: Colors.grey),
                                 suffix: InkWell(
-                                  onTap: _togglePasswordView,
+                                  onTap: () => togglePasswordView(context, togglepass),
                                   child: const Icon(
                                     Icons.visibility,
                                     color: Colors.grey,
                                   ),
                                 ),
                               ),
-                              obscureText: _isHidden,
-                              validator: (value) {
-                                _confirmpass = value;
-                                if (value.isEmpty) {
-                                  return "Requerido";
-                                } else if (value.length < 8) {
-                                  return "La contraseña debe ser mayor a 8 letras";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onSaved: (value) => _password = value,
+                              onChanged: (value) =>
+                                  updatePassword(context, value),
                             ),
                           ),
                           Container(
@@ -334,25 +256,25 @@ class _SignUpState extends State<SignUp> {
                           ),
                           Expanded(
                             child: TextFormField(
+                              obscureText: togglepass,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Verifica Tu Contraseña',
                                 hintStyle: const TextStyle(color: Colors.grey),
                                 suffix: InkWell(
-                                  onTap: _togglePasswordView,
+                                  onTap: () => togglePasswordView(context, togglepass),
                                   child: const Icon(
                                     Icons.visibility,
                                     color: Colors.grey,
                                   ),
                                 ),
                               ),
-                              obscureText: _isHidden,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return "Requerido";
                                 } else if (value.length < 8) {
                                   return "La contraseña debe ser mayor a 8 letras";
-                                } else if (value != _confirmpass) {
+                                } else if (value != pass) {
                                   return "La contraseña debe ser igual que la anterior!";
                                 } else {
                                   return null;
@@ -406,15 +328,16 @@ class _SignUpState extends State<SignUp> {
                                 const EdgeInsets.only(left: 00.0, right: 10.0),
                           ),
                           Expanded(
-                            child: TextFormField(
+                            child: TextField(
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Ingresa Tu Nombre',
                                 hintStyle: const TextStyle(color: Colors.grey),
                               ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Requirido' : null,
-                              onSaved: (value) => _name = value,
+                              onChanged: (value) => updateName(context, value),
+                              // validator: (value) =>
+                              //     value.isEmpty ? 'Requirido' : null,
+                              // onSaved: (value) => _name = value,
                             ),
                           )
                         ],
@@ -458,13 +381,11 @@ class _SignUpState extends State<SignUp> {
                           Expanded(
                               child: DropdownButton(
                             hint: const Text('Escoje Tu Estado'),
-                            value: _state,
+                            value: state,
                             onChanged: (newValue) {
-                              setState(() {
-                                _state = newValue;
-                              });
+                              updateState(context, newValue);
                             },
-                            items: _states.map((location) {
+                            items: states.map((location) {
                               return DropdownMenuItem(
                                 child: Text(location,
                                     style: const TextStyle(color: Colors.red)),
@@ -511,17 +432,39 @@ class _SignUpState extends State<SignUp> {
                                 const EdgeInsets.only(left: 00.0, right: 10.0),
                           ),
                           Expanded(
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Escoje Tu Municipio',
-                                hintStyle: const TextStyle(color: Colors.grey),
-                              ),
-                              validator: (value) =>
-                                  value.isEmpty ? 'Requirido' : null,
-                              onSaved: (value) => _municipality = value,
-                            ),
-                          )
+                              child: (state != null)
+                                  ? DropdownButton(
+                                      hint: const Text('Escoje Tu Municipio'),
+                                      value: municipality,
+                                      onChanged: (newValue) {
+                                        updateMunicipality(context, newValue);
+                                      },
+                                      items: municipalities[state]
+                                          .map<DropdownMenuItem<String>>(
+                                              (location) {
+                                        return DropdownMenuItem<String>(
+                                          child: Text(location,
+                                              style: const TextStyle(
+                                                  color: Colors.red)),
+                                          value: location,
+                                        );
+                                      }).toList(),
+                                    )
+                                  : DropdownButton<String>(
+                                      hint: const Text('Escoje Tu Municipio'),
+                                      value: municipality,
+                                      onChanged: (newValue) {
+                                        updateMunicipality(context, newValue);
+                                      },
+                                      items: _muni.map((location) {
+                                        return DropdownMenuItem(
+                                          child: Text(location,
+                                              style: const TextStyle(
+                                                  color: Colors.red)),
+                                          value: location,
+                                        );
+                                      }).toList(),
+                                    )),
                         ],
                       ),
                     ),
@@ -563,13 +506,11 @@ class _SignUpState extends State<SignUp> {
                           Expanded(
                               child: DropdownButton(
                             hint: const Text('Escoje Tu Tipo De Sangre'),
-                            value: _bloodType,
+                            value: bloodType,
                             onChanged: (newValue) {
-                              setState(() {
-                                _bloodType = newValue;
-                              });
+                              updateBloodType(context, newValue);
                             },
-                            items: _bloodTypes.map((location) {
+                            items: bloodTypes.map((location) {
                               return DropdownMenuItem(
                                 child: Text(location,
                                     style: TextStyle(color: Colors.red)),
@@ -587,68 +528,47 @@ class _SignUpState extends State<SignUp> {
                         children: <Widget>[
                           Expanded(
                             child: FlatButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                splashColor: Colors.red,
-                                color: Colors.red,
-                                child: Row(
-                                  children: <Widget>[
-                                    const Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20.0),
-                                      child: const Text(
-                                        "Registrarme",
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18.0),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)),
+                              splashColor: Colors.red,
+                              color: Colors.red,
+                              child: Row(
+                                children: <Widget>[
+                                  const Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: const Text(
+                                      "Registrarme",
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 18.0),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Container(),
+                                  ),
+                                  Transform.translate(
+                                    offset: Offset(15.0, 0.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: FlatButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(28.0)),
+                                        splashColor: Colors.white,
+                                        color: Colors.white,
+                                        child: const Icon(
+                                          Icons.check,
+                                          color: Colors.black,
+                                        ),
+                                        onPressed: () => _auth.signUp(
+                                            email: email, password: pass),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Container(),
-                                    ),
-                                    Transform.translate(
-                                      offset: Offset(15.0, 0.0),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: FlatButton(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        28.0)),
-                                            splashColor: Colors.white,
-                                            color: Colors.white,
-                                            child: const Icon(
-                                              Icons.check,
-                                              color: Colors.black,
-                                            ),
-                                            onPressed: () {
-                                              auth.createUserAndLogIn(
-                                                  context,
-                                                  validateAndSave(),
-                                                  _email,
-                                                  _password,
-                                                  _name,
-                                                  _state,
-                                                  _municipality,
-                                                  _bloodType);
-                                              _showRegistrationDialog();
-                                            }),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  auth.createUserAndLogIn(
-                                      context,
-                                      validateAndSave(),
-                                      _email,
-                                      _password,
-                                      _name,
-                                      _state,
-                                      _municipality,
-                                      _bloodType);
-                                  _showRegistrationDialog();
-                                }),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () =>
+                                  _auth.signUp(email: email, password: pass),
+                            ),
                           ),
                         ],
                       ),
@@ -672,7 +592,8 @@ class _SignUpState extends State<SignUp> {
                                       color: Colors.red, fontSize: 18.0),
                                 ),
                               ),
-                              onPressed: login,
+                              onPressed: () =>
+                                  Navigator.popAndPushNamed(context, '/Login'),
                             ),
                           ),
                         ],
@@ -683,6 +604,10 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
           ),
-        ));
+        );
+      },
+      loading: () => loading(),
+      error: (error, __) => showErrorDialog(context, error),
+    );
   }
 }
