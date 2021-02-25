@@ -232,7 +232,7 @@ class LoginPage extends ConsumerWidget {
                                             ),
                                             onPressed: () => {
                                                   _auth.login(
-                                                      email: email,
+                                                      email: email.trim(),
                                                       password: pass),
                                                   CircularProgressIndicator(),
                                                 }),
@@ -241,7 +241,7 @@ class LoginPage extends ConsumerWidget {
                                   ],
                                 ),
                                 onPressed: () => {
-                                      _auth.login(email: email, password: pass),
+                                      _auth.login(email: email.trim(), password: pass),
                                       CircularProgressIndicator(),
                                     }),
                           ),
@@ -268,7 +268,7 @@ class LoginPage extends ConsumerWidget {
                                 ),
                               ),
                               onPressed: () =>
-                                  Navigator.popAndPushNamed(context, '/Signup'),
+                                  Navigator.pushNamed(context, '/Signup'),
                             ),
                           ),
                         ],
@@ -293,7 +293,7 @@ class LoginPage extends ConsumerWidget {
                                       color: Colors.red, fontSize: 18.0),
                                 ),
                               ),
-                              onPressed: () => Navigator.popAndPushNamed(
+                              onPressed: () => Navigator.pushNamed(
                                   context, '/Recover'),
                             ),
                           ),

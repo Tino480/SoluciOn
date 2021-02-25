@@ -50,7 +50,7 @@ class MyDrawer extends StatelessWidget {
                             ),
                             onTap: () {
                               UserModel.combined = combined;
-                              Navigator.of(context).popAndPushNamed('/Chat');
+                              Navigator.of(context).pushNamed('/Chat');
                             },
                           ),
                           Divider(

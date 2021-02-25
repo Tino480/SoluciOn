@@ -7,7 +7,6 @@ import 'package:solucion/components/loading.dart';
 import 'dart:async';
 
 class SplashScreenPage extends ConsumerWidget {
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final _authState = watch(authStateProvider);
@@ -16,7 +15,7 @@ class SplashScreenPage extends ConsumerWidget {
       data: (value) {
         if (value != null) {
           _db.getUser(value.uid);
-          Future.delayed(Duration(seconds: 10), () {
+          Future.delayed(Duration(seconds: 5), () {
             Navigator.popAndPushNamed(context, '/Home');
           });
           return loading();

@@ -50,7 +50,7 @@ class _ChatState extends State<ChatPage> {
                 child: GestureDetector(
                   child: const Icon(Icons.home, size: 30.0),
                   onTap: () {
-                    Navigator.of(context).popAndPushNamed('/Home');
+                    Navigator.of(context).pushNamed('/Home');
                   },
                 ),
               )

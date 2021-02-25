@@ -77,7 +77,8 @@ class HomePage extends StatelessWidget {
                                 CircularProgressIndicator();
                                 Future.delayed(Duration(seconds: 2), () {
                                   context.refresh(cardStreamProvider);
-                                  Navigator.popAndPushNamed(context, '/Chat');
+                                  context.refresh(chatStreamProvider);
+                                  Navigator.pushNamed(context, '/Chat');
                                 });
                               },
                               child: const Text('Chat'),
