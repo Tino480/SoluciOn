@@ -159,21 +159,12 @@ class DatabaseService {
     });
   }
 
-  getMessages() async {
-    var chats = List();
-    await _firebaseDb
+  getMessages() {
+    return _firebaseDb
         .collection('Messages')
         .orderBy('date')
         .where('combined uid', isEqualTo: user.combined)
-        .get()
-        .then((value) {
-      if (value.docs.length > 0) {
-        for (var doc in value.docs) {
-          chats.add(doc.data());
-        }
-      }
-    });
-    return chats;
+        .snapshots();
   }
 
   deleteConversation(toUid, combined) async {

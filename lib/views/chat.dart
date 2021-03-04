@@ -1,32 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solucion/providers/db_provider.dart';
 import 'package:solucion/components/drawer.dart';
 import 'package:solucion/models/user.dart';
+import 'package:solucion/components/message.dart';
+import 'package:solucion/components/send_button.dart';
 
-class ChatPage extends StatefulWidget {
-  static const String id = "CHAT";
-  final User user;
-
-  const ChatPage({Key key, this.user}) : super(key: key);
-  @override
-  _ChatState createState() => _ChatState();
-}
-
-class _ChatState extends State<ChatPage> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+class ChatPage extends ConsumerWidget {
+  var db;
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
   Future<void> callback() async {
     if (messageController.text.length > 0) {
-      await _firestore.collection('Messages').add({
-        'text': messageController.text,
-        'from': user.name,
-        'combined uid': user.combined,
-        'date': DateTime.now().toIso8601String().toString(),
-      });
+      await db.sendMessage(messageController.text);
       messageController.clear();
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
@@ -37,7 +24,9 @@ class _ChatState extends State<ChatPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final _db = watch(dbServicesProvider);
+    db = _db;
     return Scaffold(
       appBar: AppBar(
         title: const Text("SoluciOn Chat"),
@@ -64,19 +53,15 @@ class _ChatState extends State<ChatPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _firestore
-                    .collection('Messages')
-                    .orderBy('date')
-                    .where('combined uid', isEqualTo: user.combined)
-                    .snapshots(),
+              child: StreamBuilder<dynamic>(
+                stream: _db.getMessages(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
                     return Center(
                       child: const CircularProgressIndicator(),
                     );
 
-                  List<DocumentSnapshot> docs = snapshot.data.docs;
+                  List<dynamic> docs = snapshot.data.docs;
 
                   List<Widget> messages = docs
                       .map((doc) => Message(
@@ -117,55 +102,6 @@ class _ChatState extends State<ChatPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SendButton extends StatelessWidget {
-  final String text;
-  final VoidCallback callback;
-
-  const SendButton({Key key, this.text, this.callback}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.red,
-      onPressed: callback,
-      child: Text(text),
-    );
-  }
-}
-
-class Message extends StatelessWidget {
-  final String from;
-  final String text;
-  final bool me;
-
-  const Message({Key key, this.from, this.text, this.me}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment:
-            me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            from,
-          ),
-          Material(
-            color: me ? Colors.deepOrange : Colors.orange,
-            borderRadius: BorderRadius.circular(10.0),
-            elevation: 6.0,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-              child: Text(
-                text,
-              ),
-            ),
-          )
-        ],
       ),
     );
   }

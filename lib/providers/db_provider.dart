@@ -23,10 +23,3 @@ final chatStreamProvider = StreamProvider.autoDispose((ref) {
       ? database.getchats().asStream()
       : const Stream.empty();
 });
-
-final messagesStreamProvider = StreamProvider.autoDispose((ref) {
-  final database = ref.watch(dbServicesProvider);
-  return database != null
-      ? database.getMessages().asStream()
-      : const Stream.empty();
-});
