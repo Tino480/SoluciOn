@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:solucion/models/user.dart' as UserModel;
+import 'package:solucion/models/user.dart';
 import 'package:solucion/providers/signup_page_providers.dart' as sign;
 
 class DatabaseService {
@@ -13,7 +13,7 @@ class DatabaseService {
       String state,
       String municipality,
       String bloodType,
-      List compatibleBloodTypes}) async {
+      List<String> compatibleBloodTypes}) async {
     await _firebaseDb.collection('Users').add({
       'User': uid,
       'Name': name,
@@ -22,12 +22,13 @@ class DatabaseService {
       'Blood Type': bloodType,
       'Compatible Blood Types': compatibleBloodTypes
     });
-    UserModel.uid = uid;
-    UserModel.name = name;
-    UserModel.state = state;
-    UserModel.municipality = municipality;
-    UserModel.bloodtype = bloodType;
-    UserModel.compatiblebloodtypes = compatibleBloodTypes;
+    user = MyUser(
+        name: name,
+        uid: uid,
+        municipality: municipality,
+        state: state,
+        bloodtype: bloodType,
+        compatiblebloodtypes: compatibleBloodTypes);
   }
 
   getUser(String uid) async {
@@ -37,15 +38,16 @@ class DatabaseService {
         .get()
         .then((val) {
       if (val.docs.length > 0) {
-        UserModel.uid = val.docs[0]["User"];
-        UserModel.name = val.docs[0]["Name"];
-        UserModel.state = val.docs[0]["State"];
-        UserModel.municipality = val.docs[0]["Municipality"];
-        UserModel.bloodtype = val.docs[0]["Blood Type"];
-        UserModel.compatiblebloodtypes =
-            val.docs[0]["Compatible Blood Types"].toList();
+        user = MyUser(
+            name: val.docs[0]["Name"],
+            uid: val.docs[0]["User"],
+            municipality: val.docs[0]["Municipality"],
+            state: val.docs[0]["State"],
+            bloodtype: val.docs[0]["Blood Type"],
+            compatiblebloodtypes: val.docs[0]["Compatible Blood Types"]);
       }
     });
+    getContacts();
   }
 
   getStates() async {
@@ -77,13 +79,13 @@ class DatabaseService {
     var cards = List();
     await _firebaseDb
         .collection('Users')
-        .where('Blood Type', whereIn: UserModel.compatiblebloodtypes)
-        .where('State', isEqualTo: UserModel.state)
+        .where('Blood Type', whereIn: user.compatiblebloodtypes)
+        .where('State', isEqualTo: user.state)
         .get()
         .then((value) {
       if (value.docs.length > 0) {
         for (var doc in value.docs) {
-          if (!UserModel.contacts.contains(doc.data()['User'])) {
+          if (!user.contacts.contains(doc.data()['User'])) {
             cards.add(doc.data());
           }
         }
@@ -96,7 +98,7 @@ class DatabaseService {
     var chats = List();
     await _firebaseDb
         .collection('Chats')
-        .doc(UserModel.uid)
+        .doc(user.uid)
         .collection('User Chats')
         .get()
         .then((value) {
@@ -110,20 +112,25 @@ class DatabaseService {
   }
 
   getContacts() async {
-    UserModel.contacts.clear();
-    String uid = UserModel.uid;
-    UserModel.contacts.add(uid);
-    await _firebaseDb.collection('Chats/$uid/User Chats').get().then((val) {
-      if (val.docs.length > 0) {
-        for (var doc in val.docs) {
-          UserModel.contacts.add(doc.data()['contact uid']);
+    if (user.contacts != null) {
+      user.contacts.clear();
+      String uid = user.uid;
+      user.contacts.add(uid);
+      await _firebaseDb.collection('Chats/$uid/User Chats').get().then((val) {
+        if (val.docs.length > 0) {
+          for (var doc in val.docs) {
+            user.contacts.add(doc.data()['contact uid']);
+          }
         }
-      }
-    });
+      });
+    } else {
+      user.contacts = ['default'];
+      getContacts();
+    }
   }
 
   setAndCreateCombined(toUid, toUserName) async {
-    String uid = UserModel.uid.toString();
+    String uid = user.uid;
     var combined;
     var firstUid = uid.codeUnits;
     var secondUid = toUid.toString().codeUnits;
@@ -138,19 +145,16 @@ class DatabaseService {
       'contact': toUserName,
       'contact uid': toUid
     });
-    await _firebaseDb.doc('Chats/$toUid/User Chats/$combined').set({
-      'Combined Uid': combined,
-      'contact': UserModel.name,
-      'contact uid': uid
-    });
-    UserModel.combined = combined;
+    await _firebaseDb.doc('Chats/$toUid/User Chats/$combined').set(
+        {'Combined Uid': combined, 'contact': user.name, 'contact uid': uid});
+    user.combined = combined;
   }
 
   sendMessage(text) async {
     await _firebaseDb.collection('Messages').add({
       'text': text,
-      'from': UserModel.name,
-      'combined uid': UserModel.combined,
+      'from': user.name,
+      'combined uid': user.combined,
       'date': DateTime.now().toIso8601String().toString(),
     });
   }
@@ -160,7 +164,7 @@ class DatabaseService {
     await _firebaseDb
         .collection('Messages')
         .orderBy('date')
-        .where('combined uid', isEqualTo: UserModel.combined)
+        .where('combined uid', isEqualTo: user.combined)
         .get()
         .then((value) {
       if (value.docs.length > 0) {
@@ -172,7 +176,8 @@ class DatabaseService {
     return chats;
   }
 
-  deleteConversation(uid, toUid, combined) async {
+  deleteConversation(toUid, combined) async {
+    String uid = user.uid;
     WriteBatch batch = _firebaseDb.batch();
     batch.delete(_firebaseDb.doc('Chats/$uid/User Chats/$combined'));
     batch.delete(_firebaseDb.doc('Chats/$toUid/User Chats/$combined'));

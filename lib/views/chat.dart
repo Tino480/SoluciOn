@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:solucion/components/drawer.dart';
-import 'package:solucion/models/user.dart' as UserModel;
+import 'package:solucion/models/user.dart';
 
 class ChatPage extends StatefulWidget {
   static const String id = "CHAT";
@@ -23,8 +23,8 @@ class _ChatState extends State<ChatPage> {
     if (messageController.text.length > 0) {
       await _firestore.collection('Messages').add({
         'text': messageController.text,
-        'from': UserModel.name,
-        'combined uid': UserModel.combined,
+        'from': user.name,
+        'combined uid': user.combined,
         'date': DateTime.now().toIso8601String().toString(),
       });
       messageController.clear();
@@ -68,7 +68,7 @@ class _ChatState extends State<ChatPage> {
                 stream: _firestore
                     .collection('Messages')
                     .orderBy('date')
-                    .where('combined uid', isEqualTo: UserModel.combined)
+                    .where('combined uid', isEqualTo: user.combined)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData)
@@ -82,7 +82,7 @@ class _ChatState extends State<ChatPage> {
                       .map((doc) => Message(
                             from: doc['from'],
                             text: doc['text'],
-                            me: UserModel.name == doc['from'],
+                            me: user.name == doc['from'],
                           ))
                       .toList();
 
@@ -140,7 +140,6 @@ class SendButton extends StatelessWidget {
 class Message extends StatelessWidget {
   final String from;
   final String text;
-
   final bool me;
 
   const Message({Key key, this.from, this.text, this.me}) : super(key: key);

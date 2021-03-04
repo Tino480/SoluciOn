@@ -39,7 +39,7 @@ const List<String> bloodTypes = [
   'AB+'
 ];
 
-const compatibleBloodTypes = <String, List>{
+const compatibleBloodTypes = <String, List<String>>{
   'O-': ['O-'],
   'O+': ['O-', 'O+'],
   'A-': ['A-', 'O-'],

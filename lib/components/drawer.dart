@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solucion/providers/db_provider.dart';
-import 'package:solucion/models/user.dart' as UserModel;
+import 'package:solucion/models/user.dart';
 import 'package:solucion/components/alert.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -41,7 +41,7 @@ class MyDrawer extends StatelessWidget {
                               icon: const Icon(Icons.delete_forever),
                               onPressed: () {
                                 _db.deleteConversation(
-                                    UserModel.uid, toUid, combined);
+                                    toUid, combined);
                                 Future.delayed(Duration(seconds: 2), () {
                                   context.refresh(chatStreamProvider);
                                   context.refresh(cardStreamProvider);
@@ -49,7 +49,7 @@ class MyDrawer extends StatelessWidget {
                               },
                             ),
                             onTap: () {
-                              UserModel.combined = combined;
+                              user.combined = combined;
                               Navigator.of(context).pushNamed('/Chat');
                             },
                           ),
