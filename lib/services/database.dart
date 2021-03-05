@@ -14,7 +14,7 @@ class DatabaseService {
       String municipality,
       String bloodType,
       List<String> compatibleBloodTypes}) async {
-    await _firebaseDb.collection('Users').add({
+    await _firebaseDb.collection('Users').doc(uid).set({
       'User': uid,
       'Name': name,
       'State': state,
