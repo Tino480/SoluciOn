@@ -69,9 +69,11 @@ class HomePage extends StatelessWidget {
                         ButtonBar(
                           alignment: MainAxisAlignment.start,
                           children: [
-                            FlatButton(
-                              textColor: Colors.black,
-                              splashColor: Colors.red,
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                shadowColor: Colors.red,
+                                textStyle: TextStyle(color: Colors.black),
+                              ),
                               onPressed: () {
                                 _db.setAndCreateCombined(toUid, name);
                                 CircularProgressIndicator();

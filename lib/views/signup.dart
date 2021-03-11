@@ -595,12 +595,14 @@ class SignUpPage extends ConsumerWidget {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                  splashColor: Colors.red,
-                                  color: Colors.red,
+                              child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    shadowColor: Colors.red,
+                                    backgroundColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                  ),
                                   child: Row(
                                     children: <Widget>[
                                       const Padding(
@@ -617,16 +619,19 @@ class SignUpPage extends ConsumerWidget {
                                         child: Container(),
                                       ),
                                       Transform.translate(
-                                        offset: Offset(15.0, 0.0),
+                                        offset: Offset(5.0, 0.0),
                                         child: Container(
                                           padding: const EdgeInsets.all(5.0),
-                                          child: FlatButton(
-                                              shape: RoundedRectangleBorder(
+                                          child: TextButton(
+                                              style: TextButton.styleFrom(
+                                                shadowColor: Colors.white,
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          28.0)),
-                                              splashColor: Colors.white,
-                                              color: Colors.white,
+                                                          28.0),
+                                                ),
+                                              ),
                                               child: const Icon(
                                                 Icons.check,
                                                 color: Colors.black,
@@ -676,10 +681,13 @@ class SignUpPage extends ConsumerWidget {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: FlatButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                color: Colors.transparent,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                ),
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 20.0),
                                   alignment: Alignment.center,

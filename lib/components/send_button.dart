@@ -7,8 +7,8 @@ class SendButton extends StatelessWidget {
   const SendButton({Key key, this.text, this.callback}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.red,
+    return TextButton(
+      // color: Colors.red,
       onPressed: callback,
       child: Text(text),
     );

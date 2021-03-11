@@ -76,7 +76,7 @@ class DatabaseService {
 
   getcards() async {
     await getContacts();
-    var cards = List();
+    List cards = [];
     await _firebaseDb
         .collection('Users')
         .where('Blood Type', whereIn: user.compatiblebloodtypes)
@@ -95,7 +95,7 @@ class DatabaseService {
   }
 
   getchats() async {
-    var chats = List();
+    List chats = [];
     await _firebaseDb
         .collection('Chats')
         .doc(user.uid)

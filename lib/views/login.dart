@@ -168,7 +168,8 @@ class LoginPage extends ConsumerWidget {
                                 hintText: 'Ingresa Tu Contraseña',
                                 hintStyle: const TextStyle(color: Colors.grey),
                                 suffix: InkWell(
-                                  onTap: () => togglePasswordView(context, togglepass),
+                                  onTap: () =>
+                                      togglePasswordView(context, togglepass),
                                   child: const Icon(
                                     Icons.visibility,
                                     color: Colors.grey,
@@ -195,11 +196,14 @@ class LoginPage extends ConsumerWidget {
                       child: Row(
                         children: <Widget>[
                           Expanded(
-                            child: FlatButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                splashColor: Colors.red,
-                                color: Colors.red,
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  shadowColor: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                ),
                                 child: Row(
                                   children: <Widget>[
                                     const Padding(
@@ -216,16 +220,18 @@ class LoginPage extends ConsumerWidget {
                                       child: Container(),
                                     ),
                                     Transform.translate(
-                                      offset: const Offset(15.0, 0.0),
+                                      offset: const Offset(5.0, 0.0),
                                       child: Container(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: FlatButton(
-                                            shape: RoundedRectangleBorder(
+                                        child: TextButton(
+                                            style: TextButton.styleFrom(
+                                              shadowColor: Colors.white,
+                                              backgroundColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        28.0)),
-                                            splashColor: Colors.white,
-                                            color: Colors.white,
+                                                    BorderRadius.circular(28.0),
+                                              ),
+                                            ),
                                             child: const Icon(
                                               Icons.check,
                                               color: Colors.black,
@@ -241,7 +247,8 @@ class LoginPage extends ConsumerWidget {
                                   ],
                                 ),
                                 onPressed: () => {
-                                      _auth.login(email: email.trim(), password: pass),
+                                      _auth.login(
+                                          email: email.trim(), password: pass),
                                       CircularProgressIndicator(),
                                     }),
                           ),
@@ -254,10 +261,7 @@ class LoginPage extends ConsumerWidget {
                       child: Row(
                         children: <Widget>[
                           Expanded(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              color: Colors.transparent,
+                            child: TextButton(
                               child: Container(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 alignment: Alignment.center,
@@ -280,10 +284,7 @@ class LoginPage extends ConsumerWidget {
                       child: Row(
                         children: <Widget>[
                           Expanded(
-                            child: FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)),
-                              color: Colors.transparent,
+                            child: TextButton(
                               child: Container(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 alignment: Alignment.center,
@@ -293,8 +294,8 @@ class LoginPage extends ConsumerWidget {
                                       color: Colors.red, fontSize: 18.0),
                                 ),
                               ),
-                              onPressed: () => Navigator.pushNamed(
-                                  context, '/Recover'),
+                              onPressed: () =>
+                                  Navigator.pushNamed(context, '/Recover'),
                             ),
                           ),
                         ],

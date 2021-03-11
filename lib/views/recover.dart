@@ -5,7 +5,6 @@ import 'package:solucion/providers/login_page_providers.dart';
 import 'package:solucion/components/clipper.dart';
 
 class RecoverPage extends ConsumerWidget {
-
   Future<void> _showRecoverDialog(context, email) async {
     return showDialog<void>(
       context: context,
@@ -32,8 +31,10 @@ class RecoverPage extends ConsumerWidget {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-              color: Colors.red,
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
               child: const Text(
                 'Listo! Ingresar A Mi Cuenta',
                 style: const TextStyle(
@@ -152,11 +153,14 @@ class RecoverPage extends ConsumerWidget {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            splashColor: Colors.red,
-                            color: Colors.red,
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                              shadowColor: Colors.red,
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
                             child: Row(
                               children: <Widget>[
                                 const Padding(
@@ -171,15 +175,18 @@ class RecoverPage extends ConsumerWidget {
                                   child: Container(),
                                 ),
                                 Transform.translate(
-                                  offset: const Offset(15.0, 0.0),
+                                  offset: const Offset(5.0, 0.0),
                                   child: Container(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: FlatButton(
-                                        shape: RoundedRectangleBorder(
+                                    child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          shadowColor: Colors.white,
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(28.0)),
-                                        splashColor: Colors.white,
-                                        color: Colors.white,
+                                                BorderRadius.circular(28.0),
+                                          ),
+                                        ),
                                         child: const Icon(
                                           Icons.check,
                                           color: Colors.black,
@@ -206,10 +213,7 @@ class RecoverPage extends ConsumerWidget {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          color: Colors.transparent,
+                        child: TextButton(
                           child: Container(
                             padding: const EdgeInsets.only(left: 20.0),
                             alignment: Alignment.center,
