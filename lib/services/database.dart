@@ -10,6 +10,7 @@ class DatabaseService {
   Future<void> createUser(
       {String uid,
       String name,
+      String userName,
       String state,
       String municipality,
       String bloodType,
@@ -17,6 +18,7 @@ class DatabaseService {
     await _firebaseDb.collection('Users').doc(uid).set({
       'User': uid,
       'Name': name,
+      'User Name': userName,
       'State': state,
       'Municipality': municipality,
       'Blood Type': bloodType,
@@ -24,6 +26,7 @@ class DatabaseService {
     });
     user = MyUser(
         name: name,
+        userName: userName,
         uid: uid,
         municipality: municipality,
         state: state,
@@ -40,6 +43,7 @@ class DatabaseService {
       if (val.docs.length > 0) {
         user = MyUser(
             name: val.docs[0]["Name"],
+            userName: val.docs[0]["User Name"],
             uid: val.docs[0]["User"],
             municipality: val.docs[0]["Municipality"],
             state: val.docs[0]["State"],
@@ -78,7 +82,7 @@ class DatabaseService {
     await getContacts();
     List cards = [];
     await _firebaseDb
-        .collection('Users')
+        .collection('Requests')
         .where('Blood Type', whereIn: user.compatiblebloodtypes)
         .where('State', isEqualTo: user.state)
         .get()
@@ -182,5 +186,49 @@ class DatabaseService {
       });
     });
     batch.commit();
+  }
+
+  makeBloodRequest(bloodType, description) async {
+    if (!sign.bloodTypes.contains(bloodType)) {
+      await _firebaseDb.collection('Requests').add({
+        'Description': description,
+        'User': user.uid,
+        'State': user.state,
+        'Municipality': user.municipality,
+        'Blood Type': user.bloodtype,
+        'Name': user.userName,
+        'Compatible Blood Types': user.compatiblebloodtypes,
+        'Create Date': DateTime.now().toIso8601String().toString(),
+      });
+    } else {
+      await _firebaseDb.collection('Requests').add({
+        'Description': description,
+        'User': user.uid,
+        'State': user.state,
+        'Municipality': user.municipality,
+        'Blood Type': bloodType,
+        'Name': user.userName,
+        'Compatible Blood Types': sign.compatibleBloodTypes[bloodType],
+        'Create Date': DateTime.now().toIso8601String().toString(),
+      });
+    }
+  }
+
+  getBloodRequest() async {
+    await getContacts();
+    List requests = [];
+    await _firebaseDb
+        .collection('Requests')
+        .orderBy('Create Date')
+        .where('User', isEqualTo: user.uid)
+        .get()
+        .then((value) {
+      if (value.docs.length > 0) {
+        for (var doc in value.docs) {
+          requests.add(doc.data());
+        }
+      }
+    });
+    return requests;
   }
 }

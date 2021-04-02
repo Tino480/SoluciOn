@@ -25,6 +25,10 @@ class SignUpPage extends ConsumerWidget {
     context.read(nameProvider).state = name;
   }
 
+  void updateUserName(BuildContext context, String userName) {
+    context.read(userNameProvider).state = userName;
+  }
+
   void updateState(BuildContext context, String state) {
     context.read(stateProvider).state = state;
   }
@@ -44,7 +48,7 @@ class SignUpPage extends ConsumerWidget {
   Future<void> _showDialog(context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: true, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
@@ -110,6 +114,7 @@ class SignUpPage extends ConsumerWidget {
     final pass = watch(passwordProvider).state;
     final passVeri = watch(passwordVerifyProvider).state;
     final name = watch(nameProvider).state;
+    final userName = watch(userNameProvider).state;
     final state = watch(stateProvider).state;
     final states = watch(statesProvider).state;
     final municipality = watch(municipalityProvider).state;
@@ -126,6 +131,7 @@ class SignUpPage extends ConsumerWidget {
           _db.createUser(
               uid: value.uid,
               name: name,
+              userName: userName,
               state: state,
               municipality: municipality,
               bloodType: bloodType,
@@ -149,8 +155,7 @@ class SignUpPage extends ConsumerWidget {
                         child: Container(
                           decoration: const BoxDecoration(
                             image: const DecorationImage(
-                              image:
-                                  const AssetImage("assets/logo_solucion.png"),
+                              image: const AssetImage("assets/logo.jpeg"),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -159,19 +164,14 @@ class SignUpPage extends ConsumerWidget {
                               const EdgeInsets.only(top: 50.0, bottom: 100.0),
                           child: Column(
                             children: <Widget>[
+                              const Padding(
+                                  padding: const EdgeInsets.only(top: 200.0)),
                               const Text(
-                                "Salva Una Vida Con",
+                                "Unidos Por La Vida",
                                 style: const TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.red),
-                              ),
-                              const Text(
-                                "SoluciOn",
-                                style: const TextStyle(
-                                    fontSize: 50.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red),
+                                    color: Colors.white),
                               ),
                             ],
                           ),
@@ -222,6 +222,56 @@ class SignUpPage extends ConsumerWidget {
                                 ),
                                 onChanged: (value) =>
                                     updateEmail(context, value),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: const EdgeInsets.only(left: 40.0),
+                        child: const Text(
+                          "Nombre De Usuario",
+                          style: const TextStyle(
+                              color: Colors.red, fontSize: 16.0),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.5),
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        child: Row(
+                          children: <Widget>[
+                            const Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 15.0),
+                              child: const Icon(
+                                Icons.person,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Container(
+                              height: 30.0,
+                              width: 1.0,
+                              color: Colors.grey.withOpacity(0.5),
+                              margin: const EdgeInsets.only(
+                                  left: 00.0, right: 10.0),
+                            ),
+                            Expanded(
+                              child: TextField(
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Ingresa Tu Nombre De Usuario',
+                                  hintStyle:
+                                      const TextStyle(color: Colors.grey),
+                                ),
+                                onChanged: (value) =>
+                                    updateUserName(context, value),
                               ),
                             )
                           ],

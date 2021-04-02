@@ -23,3 +23,10 @@ final chatStreamProvider = StreamProvider.autoDispose((ref) {
       ? database.getchats().asStream()
       : const Stream.empty();
 });
+
+final requestsStreamProvider = StreamProvider.autoDispose((ref) {
+  final database = ref.watch(dbServicesProvider);
+  return database != null
+      ? database.getBloodRequest().asStream()
+      : const Stream.empty();
+});

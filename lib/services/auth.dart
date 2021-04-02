@@ -7,8 +7,10 @@ class AuthenticationService {
 
   Stream<User> get authStateChange => _firebaseAuth.authStateChanges();
 
-  Future<bool> login({String email, String password}) async {
-    bool logedIn;
+  String errorType;
+  bool logedIn;
+
+  login({String email, String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -16,9 +18,23 @@ class AuthenticationService {
       );
       logedIn = true;
     } on FirebaseAuthException catch (e) {
+      switch (e.message) {
+        case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+          errorType = 'El usuario no existe por favor crea una cuenta!!';
+          break;
+        case 'The password is invalid or the user does not have a password.':
+          errorType =
+              'La contraseña es incorrecta por favor ingressa la contraseña correcta!! Si se te olvido tu contraseña por favor restablesala';
+          break;
+        case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
+          errorType =
+              'Existe un error con tu connecion por favor revisala y reintenta de nuevo!!';
+          break;
+        default:
+          print('Case ${e.message} is not yet implemented');
+      }
       logedIn = false;
     }
-    return logedIn;
   }
 
   Future<bool> signUp({String email, String password}) async {

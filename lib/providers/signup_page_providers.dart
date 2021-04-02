@@ -4,6 +4,10 @@ final nameProvider = StateProvider<String>((ref) {
   return null;
 });
 
+final userNameProvider = StateProvider<String>((ref) {
+  return null;
+});
+
 var newStates;
 
 var newM;

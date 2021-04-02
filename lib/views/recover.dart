@@ -72,7 +72,7 @@ class RecoverPage extends ConsumerWidget {
                   child: Container(
                     decoration: const BoxDecoration(
                       image: const DecorationImage(
-                        image: const AssetImage("assets/logo_solucion.png"),
+                        image: const AssetImage("assets/logo.jpeg"),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -80,19 +80,14 @@ class RecoverPage extends ConsumerWidget {
                     padding: const EdgeInsets.only(top: 50.0, bottom: 100.0),
                     child: Column(
                       children: <Widget>[
+                        const Padding(
+                            padding: const EdgeInsets.only(top: 200.0)),
                         const Text(
-                          "Salva Una Vida Con",
+                          "Unidos Por La Vida",
                           style: const TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
-                              color: Colors.red),
-                        ),
-                        const Text(
-                          "SoluciOn",
-                          style: const TextStyle(
-                              fontSize: 50.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red),
+                              color: Colors.white),
                         ),
                       ],
                     ),

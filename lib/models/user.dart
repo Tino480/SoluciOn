@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class MyUser {
   final String name;
+  final String userName;
   final String uid;
   final String municipality;
   final String state;
@@ -12,6 +13,7 @@ class MyUser {
 
   MyUser(
       {@required this.name,
+      @required this.userName,
       @required this.uid,
       @required this.municipality,
       @required this.state,
@@ -20,6 +22,7 @@ class MyUser {
       this.combined = '',
       this.contacts}) {
     assert(name != null, 'Name is null');
+    assert(userName != null, 'User name is null');
     assert(uid != null, 'Uid is null');
     assert(municipality != null, 'Municipality is null');
     assert(state != null, 'State is null');

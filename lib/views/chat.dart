@@ -29,7 +29,7 @@ class ChatPage extends ConsumerWidget {
     db = _db;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SoluciOn Chat"),
+        title: const Text("RedBlood Chat"),
         centerTitle: true,
         actions: <Widget>[
           Row(
