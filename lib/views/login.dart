@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:solucion/providers/auth_provider.dart';
 import 'package:solucion/providers/db_provider.dart';
 import 'package:solucion/providers/login_page_providers.dart';
-import 'package:solucion/components/clipper.dart';
 import 'package:solucion/components/alert.dart';
 import 'package:solucion/components/loading.dart';
 
@@ -29,25 +29,27 @@ class LoginPage extends ConsumerWidget {
           title: const Text(
             'Error',
             style: const TextStyle(
-                fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red),
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
                   error,
-                  style: const TextStyle(fontSize: 15.0, color: Colors.red),
+                  style: const TextStyle(fontSize: 15.0, color: Colors.white),
                 ),
                 const Text(
-                  'Por favor reinicie y intente de nuevo',
-                  style: const TextStyle(fontSize: 15.0, color: Colors.red),
+                  'Por favor reinicie e inténtelo de nuevo',
+                  style: const TextStyle(fontSize: 15.0, color: Colors.white),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              style: TextButton.styleFrom(backgroundColor: Colors.white),
               child: const Text(
                 'Okey',
                 style: const TextStyle(
@@ -84,52 +86,50 @@ class LoginPage extends ConsumerWidget {
           return loading();
         }
         return (_auth.logedIn != false)
-            ? Scaffold(
-                backgroundColor: Colors.white,
-                body: SafeArea(
-                  child: SingleChildScrollView(
+            ? SafeArea(
+                child: Scaffold(
+                  backgroundColor: HexColor('#e30713'),
+                  body: SingleChildScrollView(
                     child: Container(
+                      color: HexColor('#e30713'),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          ClipPath(
-                            clipper: MyClipper(),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                image: const DecorationImage(
-                                  image: const AssetImage("assets/logo.jpeg"),
-                                  fit: BoxFit.cover,
+                          Container(
+                            decoration: const BoxDecoration(
+                              image: const DecorationImage(
+                                image: const AssetImage("assets/logo.jpeg"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            padding:
+                                const EdgeInsets.only(top: 50.0, bottom: 100.0),
+                            child: Column(
+                              children: <Widget>[
+                                const Padding(
+                                    padding: const EdgeInsets.only(top: 200.0)),
+                                const Text(
+                                  "Unidos Por La Vida",
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
-                              ),
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.only(
-                                  top: 50.0, bottom: 100.0),
-                              child: Column(
-                                children: <Widget>[
-                                  const Padding(
-                                      padding:
-                                          const EdgeInsets.only(top: 200.0)),
-                                  const Text(
-                                    "Unidos Por La Vida",
-                                    style: const TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                ],
-                              ),
+                              ],
                             ),
                           ),
                           const Padding(
                             padding: const EdgeInsets.only(left: 40.0),
                             child: const Text(
-                              "Correo Electronico",
+                              "Correo Electrónico",
                               style: const TextStyle(
-                                  color: Colors.red, fontSize: 16.0),
+                                  color: Colors.white, fontSize: 16.0),
                             ),
                           ),
                           Container(
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(
                                 color: Colors.grey.withOpacity(0.5),
                                 width: 1.0,
@@ -159,7 +159,7 @@ class LoginPage extends ConsumerWidget {
                                   child: TextField(
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: 'Ingresa Tu Correo Electronico',
+                                      hintText: 'Ingresa Tu Correo Electrónico',
                                       hintStyle:
                                           const TextStyle(color: Colors.grey),
                                     ),
@@ -175,11 +175,12 @@ class LoginPage extends ConsumerWidget {
                             child: const Text(
                               "Contraseña",
                               style: const TextStyle(
-                                  color: Colors.red, fontSize: 16.0),
+                                  color: Colors.white, fontSize: 16.0),
                             ),
                           ),
                           Container(
                             decoration: BoxDecoration(
+                              color: Colors.white,
                               border: Border.all(
                                 color: Colors.grey.withOpacity(0.5),
                                 width: 1.0,
@@ -246,7 +247,7 @@ class LoginPage extends ConsumerWidget {
                                   child: TextButton(
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.red,
-                                        shadowColor: Colors.red,
+                                        shadowColor: Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(30.0),
@@ -321,7 +322,8 @@ class LoginPage extends ConsumerWidget {
                                       child: const Text(
                                         "¿No Tienes Cuenta?",
                                         style: const TextStyle(
-                                            color: Colors.red, fontSize: 18.0),
+                                            color: Colors.white,
+                                            fontSize: 18.0),
                                       ),
                                     ),
                                     onPressed: () =>
@@ -346,7 +348,8 @@ class LoginPage extends ConsumerWidget {
                                       child: const Text(
                                         "¿Olvidaste Tu Contraseña?",
                                         style: const TextStyle(
-                                            color: Colors.red, fontSize: 18.0),
+                                            color: Colors.white,
+                                            fontSize: 18.0),
                                       ),
                                     ),
                                     onPressed: () => Navigator.pushNamed(

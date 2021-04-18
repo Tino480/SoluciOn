@@ -10,12 +10,17 @@ class SplashScreenPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final _authState = watch(authStateProvider);
+    final _auth = watch(authServicesProvider);
     final _db = watch(dbServicesProvider);
     return _authState.when(
       data: (value) {
         if (value != null) {
           _db.getUser(value.uid);
-          Future.delayed(Duration(seconds: 5), () {
+          _db.getStates();
+          _db.getMunicipalities();
+          _auth.deleteAppDir();
+          _auth.deleteCacheDir();
+          Future.delayed(Duration(seconds: 10), () {
             Navigator.popAndPushNamed(context, '/Home');
           });
           return loading();

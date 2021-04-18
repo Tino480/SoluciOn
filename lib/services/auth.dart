@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -47,13 +48,32 @@ class AuthenticationService {
       await _firebaseAuth.currentUser.sendEmailVerification();
       signedUp = true;
     } on FirebaseAuthException catch (e) {
+      print(e);
       signedUp = false;
     }
     return signedUp;
   }
 
+  Future<void> deleteCacheDir() async {
+    final cacheDir = await getTemporaryDirectory();
+
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
+    }
+  }
+
+  Future<void> deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
+    }
+  }
+
   Future<void> signOut(context) async {
     await _firebaseAuth.signOut();
+    await deleteCacheDir();
+    await deleteAppDir();
     Navigator.popAndPushNamed(context, '/Splash');
   }
 

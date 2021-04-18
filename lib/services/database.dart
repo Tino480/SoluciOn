@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:solucion/models/user.dart';
 import 'package:solucion/providers/signup_page_providers.dart' as sign;
+import 'package:solucion/providers/db_provider.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firebaseDb;
@@ -11,6 +12,8 @@ class DatabaseService {
       {String uid,
       String name,
       String userName,
+      int phoneNumber,
+      String email,
       String state,
       String municipality,
       String bloodType,
@@ -19,6 +22,8 @@ class DatabaseService {
       'User': uid,
       'Name': name,
       'User Name': userName,
+      'Phone Number': phoneNumber,
+      'Email': email,
       'State': state,
       'Municipality': municipality,
       'Blood Type': bloodType,
@@ -27,6 +32,8 @@ class DatabaseService {
     user = MyUser(
         name: name,
         userName: userName,
+        phoneNumber: phoneNumber,
+        email: email,
         uid: uid,
         municipality: municipality,
         state: state,
@@ -44,6 +51,8 @@ class DatabaseService {
         user = MyUser(
             name: val.docs[0]["Name"],
             userName: val.docs[0]["User Name"],
+            phoneNumber: val.docs[0]["Phone Number"],
+            email: val.docs[0]["Email"],
             uid: val.docs[0]["User"],
             municipality: val.docs[0]["Municipality"],
             state: val.docs[0]["State"],
@@ -52,6 +61,15 @@ class DatabaseService {
       }
     });
     getContacts();
+  }
+
+  updateFirebaseUser() async {
+    await _firebaseDb.collection('Users').doc(user.uid).update({
+      'User Name': user.userName,
+      'Phone Number': user.phoneNumber,
+      'State': user.state,
+      'Municipality': user.municipality,
+    });
   }
 
   getStates() async {
@@ -95,6 +113,14 @@ class DatabaseService {
         }
       }
     });
+    if (cards.length == 0) {
+      cards.add({
+        'Description':
+            'Aquí aparecerán las solicitudes de otras personas a las que puede donar',
+        'Municipality': '',
+        'User': null
+      });
+    }
     return cards;
   }
 
@@ -149,15 +175,18 @@ class DatabaseService {
       'contact': toUserName,
       'contact uid': toUid
     });
-    await _firebaseDb.doc('Chats/$toUid/User Chats/$combined').set(
-        {'Combined Uid': combined, 'contact': user.name, 'contact uid': uid});
+    await _firebaseDb.doc('Chats/$toUid/User Chats/$combined').set({
+      'Combined Uid': combined,
+      'contact': user.userName,
+      'contact uid': uid
+    });
     user.combined = combined;
   }
 
   sendMessage(text) async {
     await _firebaseDb.collection('Messages').add({
       'text': text,
-      'from': user.name,
+      'from': user.userName,
       'combined uid': user.combined,
       'date': DateTime.now().toIso8601String().toString(),
     });
@@ -188,7 +217,7 @@ class DatabaseService {
     batch.commit();
   }
 
-  makeBloodRequest(bloodType, description) async {
+  makeBloodRequest(bloodType, description, context) async {
     if (!sign.bloodTypes.contains(bloodType)) {
       await _firebaseDb.collection('Requests').add({
         'Description': description,
@@ -200,6 +229,7 @@ class DatabaseService {
         'Compatible Blood Types': user.compatiblebloodtypes,
         'Create Date': DateTime.now().toIso8601String().toString(),
       });
+      context.refresh(requestsStreamProvider);
     } else {
       await _firebaseDb.collection('Requests').add({
         'Description': description,
@@ -211,6 +241,7 @@ class DatabaseService {
         'Compatible Blood Types': sign.compatibleBloodTypes[bloodType],
         'Create Date': DateTime.now().toIso8601String().toString(),
       });
+      context.refresh(requestsStreamProvider);
     }
   }
 
@@ -229,6 +260,71 @@ class DatabaseService {
         }
       }
     });
+    if (requests.length == 0) {
+      requests.add({
+        'Description': """Bienvenido!! aquí aparecerán todas sus solicitudes.
+            \nPara solicitar sangre presione el botón + en la parte inferior""",
+        'Municipality': '',
+      });
+    }
     return requests;
+  }
+
+  updateBloodRequest(date, description, blood, name, bloodType) async {
+    String request;
+    String des;
+    String bl;
+    if (description != null) {
+      if (description != name) {
+        des = description;
+      } else {
+        des = name;
+      }
+    } else {
+      des = name;
+    }
+    if (blood != null) {
+      if (blood != bloodType) {
+        bl = blood;
+      } else {
+        bl = bloodType;
+      }
+    } else {
+      bl = bloodType;
+    }
+    await _firebaseDb
+        .collection('Requests')
+        .where('User', isEqualTo: user.uid)
+        .where('Create Date', isEqualTo: date)
+        .get()
+        .then((value) {
+      if (value.docs.length > 0) {
+        for (var doc in value.docs) {
+          request = doc.id;
+        }
+      }
+    });
+    await _firebaseDb.collection('Requests').doc(request).update({
+      'Description': des,
+      'Blood Type': bl,
+      'Compatible Blood Types': sign.compatibleBloodTypes[blood],
+    });
+  }
+
+  deleteBloodRequest(date) async {
+    String request;
+    await _firebaseDb
+        .collection('Requests')
+        .where('User', isEqualTo: user.uid)
+        .where('Create Date', isEqualTo: date)
+        .get()
+        .then((value) {
+      if (value.docs.length > 0) {
+        for (var doc in value.docs) {
+          request = doc.id;
+        }
+      }
+    });
+    await _firebaseDb.collection('Requests').doc(request).delete();
   }
 }

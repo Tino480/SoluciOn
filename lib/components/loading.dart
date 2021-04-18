@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 loading() {
-  return Scaffold(
-    body: SafeArea(
-      child: Stack(
+  return SafeArea(
+    child: Scaffold(
+      body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
+              color: HexColor('#e30713'),
               image: const DecorationImage(
                 image: const AssetImage("assets/logo.jpeg"),
                 fit: BoxFit.fitWidth,
@@ -17,20 +19,6 @@ loading() {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              // Expanded(
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: <Widget>[
-              //       const Text(
-              //         "Salva Una Vida Con",
-              //         style: const TextStyle(
-              //             color: Colors.red,
-              //             fontSize: 30.0,
-              //             fontWeight: FontWeight.bold),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -42,7 +30,7 @@ loading() {
                     const Text(
                       "Unidos Por La Vida",
                       style: const TextStyle(
-                          color: Colors.red,
+                          color: Colors.white,
                           fontSize: 40.0,
                           fontWeight: FontWeight.bold),
                     ),

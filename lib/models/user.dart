@@ -1,19 +1,23 @@
 import 'package:flutter/foundation.dart';
 
 class MyUser {
+  final String email;
   final String name;
-  final String userName;
+  String userName;
+  int phoneNumber;
   final String uid;
-  final String municipality;
-  final String state;
+  String municipality;
+  String state;
   final String bloodtype;
   final List<dynamic> compatiblebloodtypes;
   String combined;
   List<String> contacts;
 
   MyUser(
-      {@required this.name,
+      {@required this.email,
+      @required this.name,
       @required this.userName,
+      @required this.phoneNumber,
       @required this.uid,
       @required this.municipality,
       @required this.state,

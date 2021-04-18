@@ -8,6 +8,18 @@ final userNameProvider = StateProvider<String>((ref) {
   return null;
 });
 
+final updateUserNameProvider = StateProvider<String>((ref) {
+  return null;
+});
+
+final phoneNumberProvider = StateProvider<int>((ref) {
+  return null;
+});
+
+final updatePhoneNumberProvider = StateProvider<int>((ref) {
+  return null;
+});
+
 var newStates;
 
 var newM;
@@ -16,11 +28,19 @@ final stateProvider = StateProvider<String>((ref) {
   return null;
 });
 
+final updateStateProvider = StateProvider<String>((ref) {
+  return null;
+});
+
 final statesProvider = StateProvider<List>((ref) {
   return newStates;
 });
 
 final municipalityProvider = StateProvider<String>((ref) {
+  return null;
+});
+
+final updateMunicipalityProvider = StateProvider<String>((ref) {
   return null;
 });
 
