@@ -56,7 +56,7 @@ class SignUpPage extends ConsumerWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
-            'Error de Registro',
+            'Error de registro',
             style: const TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -70,15 +70,19 @@ class SignUpPage extends ConsumerWidget {
                   style: const TextStyle(fontSize: 15.0, color: Colors.red),
                 ),
                 const Text(
-                  '1. Todos los campos son obligatorios',
+                  '1. Todos los campos son obligatorios.',
                   style: const TextStyle(fontSize: 15.0, color: Colors.red),
                 ),
                 const Text(
-                  '2. El Correo electrónico debe de ser valido y no tener espacio vasio al final',
+                  '2. El Correo electrónico debe de ser valido y no tener espacio vacío al final.',
                   style: const TextStyle(fontSize: 15.0, color: Colors.red),
                 ),
                 const Text(
-                  '3. La contraseña debe ser igual en ambos campos y mayor de 7 caracteres',
+                  '3. La contraseña debe ser igual en ambos campos y mayor de 7 caracteres.',
+                  style: const TextStyle(fontSize: 15.0, color: Colors.red),
+                ),
+                const Text(
+                  '4. El numero de telefono debe ser de 10 caracteres.',
                   style: const TextStyle(fontSize: 15.0, color: Colors.red),
                 ),
               ],
@@ -89,26 +93,44 @@ class SignUpPage extends ConsumerWidget {
     );
   }
 
-  verifyForm(
-      context, email, pass, passVeri, name, state, municipality, bloodType) {
+  verifyForm(context, email, pass, passVeri, name, state, municipality,
+      bloodType, phone) {
     if (email?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (pass?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (passVeri?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (name?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (state?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (municipality?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (bloodType?.isEmpty ?? true) {
       _showDialog(context);
+      return false;
     } else if (pass != passVeri) {
       _showDialog(context);
+      return false;
     } else if (pass.length < 8) {
       _showDialog(context);
+      return false;
+    } else if (phone.toString().length < 10) {
+      _showDialog(context);
+      return false;
+    } else if (phone.toString().length > 10) {
+      _showDialog(context);
+      return false;
+    } else if (phone.toString()?.isEmpty ?? true) {
+      _showDialog(context);
+      return false;
     } else {
       return true;
     }
@@ -131,7 +153,7 @@ class SignUpPage extends ConsumerWidget {
     final _auth = watch(authServicesProvider);
     final _db = watch(dbServicesProvider);
     final _authState = watch(authStateProvider);
-    List<String> defaultMunicipality = ['Escoge Un Estado Primero!!'];
+    List<String> defaultMunicipality = ['Escoge un estado primero!!'];
     return _authState.when(
       data: (value) {
         if (value != null) {
@@ -145,7 +167,7 @@ class SignUpPage extends ConsumerWidget {
               municipality: municipality,
               bloodType: bloodType,
               compatibleBloodTypes: compatibleBloodTypes[bloodType]);
-          Future.delayed(Duration(seconds: 5), () {
+          Future.delayed(Duration(seconds: 10), () {
             Navigator.popAndPushNamed(context, '/Home');
           });
           return loading();
@@ -163,7 +185,7 @@ class SignUpPage extends ConsumerWidget {
                       Container(
                         decoration: const BoxDecoration(
                           image: const DecorationImage(
-                            image: const AssetImage("assets/logo.jpeg"),
+                            image: const AssetImage("assets/redblood.jpeg"),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -187,7 +209,7 @@ class SignUpPage extends ConsumerWidget {
                       const Padding(
                         padding: const EdgeInsets.only(left: 40.0),
                         child: const Text(
-                          "Correo Electrónico",
+                          "Correo electrónico",
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0),
                         ),
@@ -224,7 +246,7 @@ class SignUpPage extends ConsumerWidget {
                               child: TextField(
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ingresa Tu Correo Electrónico',
+                                  hintText: 'Ingresa tu correo electrónico',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                 ),
@@ -238,7 +260,7 @@ class SignUpPage extends ConsumerWidget {
                       const Padding(
                         padding: const EdgeInsets.only(left: 40.0),
                         child: const Text(
-                          "Nombre De Usuario",
+                          "Nombre de usuario",
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0),
                         ),
@@ -275,7 +297,7 @@ class SignUpPage extends ConsumerWidget {
                               child: TextField(
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ingresa Tu Nombre De Usuario',
+                                  hintText: 'Ingresa tu nombre de usuario',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                 ),
@@ -327,7 +349,7 @@ class SignUpPage extends ConsumerWidget {
                                 obscureText: togglepass,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ingresa Tu Contraseña',
+                                  hintText: 'Ingresa tu contraseña',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   suffix: InkWell(
@@ -394,7 +416,7 @@ class SignUpPage extends ConsumerWidget {
                                 obscureText: togglepass,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Verifica Tu Contraseña',
+                                  hintText: 'Verifica tu contraseña',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                   suffix: InkWell(
@@ -423,7 +445,7 @@ class SignUpPage extends ConsumerWidget {
                       const Padding(
                         padding: const EdgeInsets.only(left: 40.0),
                         child: const Text(
-                          "Nombre Completo",
+                          "Nombre completo",
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0),
                         ),
@@ -460,7 +482,7 @@ class SignUpPage extends ConsumerWidget {
                               child: TextField(
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ingresa Tu Nombre Completo',
+                                  hintText: 'Ingresa tu nombre completo',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                 ),
@@ -474,7 +496,7 @@ class SignUpPage extends ConsumerWidget {
                       const Padding(
                         padding: const EdgeInsets.only(left: 40.0),
                         child: const Text(
-                          "Numero De Teléfono",
+                          "Numero de teléfono",
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0),
                         ),
@@ -512,7 +534,7 @@ class SignUpPage extends ConsumerWidget {
                                 keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Ingresa Tu Numero De Teléfono',
+                                  hintText: 'Ingresa tu numero de teléfono',
                                   hintStyle:
                                       const TextStyle(color: Colors.grey),
                                 ),
@@ -561,7 +583,7 @@ class SignUpPage extends ConsumerWidget {
                             ),
                             Expanded(
                                 child: DropdownButton(
-                              hint: const Text('Escoje Tu Estado'),
+                              hint: const Text('Escoje tu estado'),
                               value: state,
                               onChanged: (newValue) {
                                 updateState(context, newValue);
@@ -617,7 +639,7 @@ class SignUpPage extends ConsumerWidget {
                             Expanded(
                                 child: (state != null)
                                     ? DropdownButton(
-                                        hint: const Text('Escoje Tu Municipio'),
+                                        hint: const Text('Escoje tu municipio'),
                                         value: municipality,
                                         onChanged: (newValue) {
                                           updateMunicipality(context, newValue);
@@ -634,7 +656,7 @@ class SignUpPage extends ConsumerWidget {
                                         }).toList(),
                                       )
                                     : DropdownButton<String>(
-                                        hint: const Text('Escoje Tu Municipio'),
+                                        hint: const Text('Escoje tu municipio'),
                                         value: municipality,
                                         onChanged: (newValue) {
                                           updateMunicipality(context, newValue);
@@ -655,7 +677,7 @@ class SignUpPage extends ConsumerWidget {
                       const Padding(
                         padding: const EdgeInsets.only(left: 40.0),
                         child: const Text(
-                          "Tipo De Sangre",
+                          "Tipo de sangre",
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16.0),
                         ),
@@ -690,7 +712,7 @@ class SignUpPage extends ConsumerWidget {
                             ),
                             Expanded(
                                 child: DropdownButton(
-                              hint: const Text('Escoje Tu Tipo De Sangre'),
+                              hint: const Text('Escoje tu tipo de sangre'),
                               value: bloodType,
                               onChanged: (newValue) {
                                 updateBloodType(context, newValue);
@@ -762,7 +784,8 @@ class SignUpPage extends ConsumerWidget {
                                                         name,
                                                         state,
                                                         municipality,
-                                                        bloodType))
+                                                        bloodType,
+                                                        phoneNumber))
                                                       {
                                                         _auth.signUp(
                                                             email: email,
@@ -782,7 +805,8 @@ class SignUpPage extends ConsumerWidget {
                                             name,
                                             state,
                                             municipality,
-                                            bloodType))
+                                            bloodType,
+                                            phoneNumber))
                                           {
                                             _auth.signUp(
                                                 email: email, password: pass)
@@ -809,7 +833,7 @@ class SignUpPage extends ConsumerWidget {
                                   padding: const EdgeInsets.only(left: 20.0),
                                   alignment: Alignment.center,
                                   child: const Text(
-                                    "¿Ya Tienes Cuenta?",
+                                    "¿Ya tienes cuenta?",
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 18.0),
                                   ),

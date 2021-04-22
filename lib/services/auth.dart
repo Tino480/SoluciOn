@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -9,7 +9,7 @@ class AuthenticationService {
   Stream<User> get authStateChange => _firebaseAuth.authStateChanges();
 
   String errorType;
-  bool logedIn;
+  bool logedIn = true;
 
   login({String email, String password}) async {
     try {
@@ -17,7 +17,6 @@ class AuthenticationService {
         email: email,
         password: password,
       );
-      logedIn = true;
     } on FirebaseAuthException catch (e) {
       switch (e.message) {
         case 'There is no user record corresponding to this identifier. The user may have been deleted.':
@@ -72,9 +71,9 @@ class AuthenticationService {
 
   Future<void> signOut(context) async {
     await _firebaseAuth.signOut();
+    Phoenix.rebirth(context);
     await deleteCacheDir();
     await deleteAppDir();
-    Navigator.popAndPushNamed(context, '/Splash');
   }
 
   Future<void> resetPassword({String email}) async {

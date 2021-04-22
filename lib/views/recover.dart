@@ -12,7 +12,7 @@ class RecoverPage extends ConsumerWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
-            'Recuperacion Exitosa',
+            'Recuperacion exitosa',
             style: const TextStyle(
                 fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.red),
           ),
@@ -36,7 +36,7 @@ class RecoverPage extends ConsumerWidget {
                 backgroundColor: Colors.red,
               ),
               child: const Text(
-                'Listo! Ingresar A Mi Cuenta',
+                'Listo ingresar a mi cuenta!',
                 style: const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -72,7 +72,7 @@ class RecoverPage extends ConsumerWidget {
                   Container(
                     decoration: const BoxDecoration(
                       image: const DecorationImage(
-                        image: const AssetImage("assets/logo.jpeg"),
+                        image: const AssetImage("assets/redblood.jpeg"),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -83,7 +83,7 @@ class RecoverPage extends ConsumerWidget {
                         const Padding(
                             padding: const EdgeInsets.only(top: 200.0)),
                         const Text(
-                          "Unidos Por La Vida",
+                          "Unidos por la vida",
                           style: const TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class RecoverPage extends ConsumerWidget {
                   const Padding(
                     padding: const EdgeInsets.only(left: 40.0),
                     child: const Text(
-                      "Correo Electrónico",
+                      "Correo electrónico",
                       style:
                           const TextStyle(color: Colors.white, fontSize: 16.0),
                     ),
@@ -132,7 +132,7 @@ class RecoverPage extends ConsumerWidget {
                           child: TextField(
                             decoration: const InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Ingresa Tu Correo Electrónico',
+                              hintText: 'Ingresa tu correo electrónico',
                               hintStyle: const TextStyle(color: Colors.grey),
                             ),
                             // validator: (value) =>
@@ -215,7 +215,7 @@ class RecoverPage extends ConsumerWidget {
                               padding: const EdgeInsets.only(left: 20.0),
                               alignment: Alignment.center,
                               child: const Text(
-                                "Pantalla de Inicio",
+                                "Pantalla de inicio",
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 18.0),
                               ),

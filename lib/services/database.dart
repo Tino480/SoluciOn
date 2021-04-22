@@ -42,22 +42,18 @@ class DatabaseService {
   }
 
   getUser(String uid) async {
-    await _firebaseDb
-        .collection('Users')
-        .where('User', isEqualTo: uid)
-        .get()
-        .then((val) {
-      if (val.docs.length > 0) {
+    await _firebaseDb.collection('Users').doc(uid).get().then((val) {
+      if (val.exists) {
         user = MyUser(
-            name: val.docs[0]["Name"],
-            userName: val.docs[0]["User Name"],
-            phoneNumber: val.docs[0]["Phone Number"],
-            email: val.docs[0]["Email"],
-            uid: val.docs[0]["User"],
-            municipality: val.docs[0]["Municipality"],
-            state: val.docs[0]["State"],
-            bloodtype: val.docs[0]["Blood Type"],
-            compatiblebloodtypes: val.docs[0]["Compatible Blood Types"]);
+            name: val.data()["Name"],
+            userName: val.data()["User Name"],
+            phoneNumber: val.data()["Phone Number"],
+            email: val.data()["Email"],
+            uid: val.data()["User"],
+            municipality: val.data()["Municipality"],
+            state: val.data()["State"],
+            bloodtype: val.data()["Blood Type"],
+            compatiblebloodtypes: val.data()["Compatible Blood Types"]);
       }
     });
     getContacts();

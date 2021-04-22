@@ -11,7 +11,7 @@ loading() {
             decoration: BoxDecoration(
               color: HexColor('#e30713'),
               image: const DecorationImage(
-                image: const AssetImage("assets/logo.jpeg"),
+                image: const AssetImage("assets/redblood.jpeg"),
                 fit: BoxFit.fitWidth,
               ),
             ),

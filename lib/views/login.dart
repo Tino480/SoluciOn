@@ -58,7 +58,7 @@ class LoginPage extends ConsumerWidget {
                     color: Colors.white),
               ),
               onPressed: () {
-                _auth.logedIn = null;
+                _auth.logedIn = true;
                 Navigator.popAndPushNamed(context, '/Splash');
               },
             ),
@@ -80,7 +80,7 @@ class LoginPage extends ConsumerWidget {
       data: (value) {
         if (value != null) {
           _db.getUser(value.uid);
-          Future.delayed(Duration(seconds: 5), () {
+          Future.delayed(Duration(seconds: 10), () {
             Navigator.popAndPushNamed(context, '/Home');
           });
           return loading();
@@ -98,7 +98,7 @@ class LoginPage extends ConsumerWidget {
                           Container(
                             decoration: const BoxDecoration(
                               image: const DecorationImage(
-                                image: const AssetImage("assets/logo.jpeg"),
+                                image: const AssetImage("assets/redblood.jpeg"),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -122,7 +122,7 @@ class LoginPage extends ConsumerWidget {
                           const Padding(
                             padding: const EdgeInsets.only(left: 40.0),
                             child: const Text(
-                              "Correo Electrónico",
+                              "Correo electrónico",
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 16.0),
                             ),
@@ -159,7 +159,7 @@ class LoginPage extends ConsumerWidget {
                                   child: TextField(
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: 'Ingresa Tu Correo Electrónico',
+                                      hintText: 'Ingresa tu correo electrónico',
                                       hintStyle:
                                           const TextStyle(color: Colors.grey),
                                     ),
@@ -211,7 +211,7 @@ class LoginPage extends ConsumerWidget {
                                     obscureText: togglepass,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      hintText: 'Ingresa Tu Contraseña',
+                                      hintText: 'Ingresa tu contraseña',
                                       hintStyle:
                                           const TextStyle(color: Colors.grey),
                                       suffix: InkWell(
@@ -320,7 +320,7 @@ class LoginPage extends ConsumerWidget {
                                           const EdgeInsets.only(left: 20.0),
                                       alignment: Alignment.center,
                                       child: const Text(
-                                        "¿No Tienes Cuenta?",
+                                        "¿No tienes cuenta?",
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 18.0),
@@ -346,7 +346,7 @@ class LoginPage extends ConsumerWidget {
                                           const EdgeInsets.only(left: 20.0),
                                       alignment: Alignment.center,
                                       child: const Text(
-                                        "¿Olvidaste Tu Contraseña?",
+                                        "¿Olvidaste tu contraseña?",
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 18.0),

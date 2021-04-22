@@ -120,20 +120,20 @@ class HomePage extends ConsumerWidget {
     final municipalities = watch(municipalitiesProvider).state;
     final _selectedIndex = watch(selectedIndexProvider).state;
     final _db = watch(dbServicesProvider);
-    List<String> defaultMunicipality = ['Escoge Un Estado Primero!!'];
+    List<String> defaultMunicipality = ['Escoge un estado primero!!'];
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: (soliciting != false)
-              ? Text('Mis Solicitudes')
+              ? Text('Mis solicitudes')
               : (donating != false)
-                  ? Text('Solicitudes Para Donar')
+                  ? Text('Solicitudes para donar')
                   : (profile != false)
-                      ? Text('Mi Perfil')
+                      ? Text('Mi perfil')
                       : (messaging != false)
-                          ? Text('Mis Mensages')
+                          ? Text('Mis mensages')
                           : (requirments != false)
-                              ? Text('Requisitos Para Donar')
+                              ? Text('Requisitos para donar')
                               : Container(),
           automaticallyImplyLeading: false,
           centerTitle: true,
@@ -160,7 +160,7 @@ class HomePage extends ConsumerWidget {
           decoration: BoxDecoration(
             color: HexColor("#e30713"),
             image: const DecorationImage(
-              image: const AssetImage("assets/logo.jpeg"),
+              image: const AssetImage("assets/redblood.jpeg"),
               fit: BoxFit.fitWidth,
             ),
           ),
@@ -188,7 +188,7 @@ class HomePage extends ConsumerWidget {
                                           String description;
                                           return AlertDialog(
                                             scrollable: true,
-                                            title: Text("Actualizar Solicitud"),
+                                            title: Text("Actualizar solicitud"),
                                             content: StatefulBuilder(builder:
                                                 (BuildContext context,
                                                     StateSetter setState) {
@@ -265,7 +265,7 @@ class HomePage extends ConsumerWidget {
                                                                       .only(
                                                                   left: 0.0),
                                                           child: const Text(
-                                                            "Tipo De Sangre",
+                                                            "Tipo de sangre",
                                                             style:
                                                                 const TextStyle(
                                                                     color: Colors
@@ -534,14 +534,14 @@ class HomePage extends ConsumerWidget {
                                   }
                                 : () {},
                             child: Card(
-                              color: HexColor("#767575").withOpacity(0.9),
+                              color: Colors.white.withOpacity(0.9),
                               clipBehavior: Clip.antiAlias,
                               child: Column(
                                 children: [
                                   ListTile(
                                     title: Text(
                                       name,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                   ),
                                   Padding(
@@ -549,7 +549,7 @@ class HomePage extends ConsumerWidget {
                                     child: Text(
                                       municipality,
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -573,14 +573,14 @@ class HomePage extends ConsumerWidget {
                               final municipality = card[index]['Municipality'];
                               final toUid = card[index]['User'];
                               return Card(
-                                color: HexColor("#767575").withOpacity(0.9),
+                                color: Colors.white.withOpacity(0.9),
                                 clipBehavior: Clip.antiAlias,
                                 child: Column(
                                   children: [
                                     ListTile(
                                       title: Text(
                                         description,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.black),
                                       ),
                                     ),
                                     Padding(
@@ -588,7 +588,7 @@ class HomePage extends ConsumerWidget {
                                       child: Text(
                                         municipality,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
@@ -620,7 +620,7 @@ class HomePage extends ConsumerWidget {
                                           child: const Text(
                                             'Donar',
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20),
                                           ),
@@ -644,7 +644,7 @@ class HomePage extends ConsumerWidget {
                                 const Padding(
                                   padding: const EdgeInsets.only(left: 40.0),
                                   child: const Text(
-                                    "Nombre De Usuario",
+                                    "Nombre de usuario",
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 16.0),
                                   ),
@@ -695,7 +695,7 @@ class HomePage extends ConsumerWidget {
                                 const Padding(
                                   padding: const EdgeInsets.only(left: 40.0),
                                   child: const Text(
-                                    "Número De Teléfono",
+                                    "Número de teléfono",
                                     style: const TextStyle(
                                         color: Colors.white, fontSize: 16.0),
                                   ),
@@ -1063,121 +1063,121 @@ class HomePage extends ConsumerWidget {
                                     children: <Widget>[
                                       ListTile(
                                         title: Text(
-                                          'Mayor de 18 años y menor de 65',
+                                          '⚪ Mayor de 18 años y menor de 65.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'Peso minimo de 55kg',
+                                          '⚪ Peso minimo de 55kg.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No estar enfermo en el momento actual, no ser diabetico, no hipertenso',
+                                          '⚪ No estar enfermo en el momento actual, no ser diabetico, no hipertenso.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No estar embarazada ni lactando',
+                                          '⚪ No estar embarazada ni lactando.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No haber tenido mas de 4 embarazos incluyendo abortos',
+                                          '⚪ No haber tenido mas de 4 embarazos incluyendo abortos.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No andar menstruando (mínimo 5 días después de la ultima regla)',
+                                          '⚪ No andar menstruando (mínimo 5 días después de la ultima regla).',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No haber padecido hepatitis, fiebre tifoidea, brucelosis, paludismo, tuberculosis',
+                                          '⚪ No haber padecido hepatitis, fiebre tifoidea, brucelosis, paludismo, tuberculosis.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No bebidas alcohólicas o analgésicos (48 horas antes)',
+                                          '⚪ No bebidas alcohólicas o analgésicos (48 horas antes).',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No padecer alergias o estar ingiriendo algún medicamento (sobre todo aspirina)',
+                                          '⚪ No padecer alergias o estar ingiriendo algún medicamento (sobre todo aspirina).',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No tatuajes, perforaciones ni acupuntura en el ultimo año',
+                                          '⚪ No tatuajes, perforaciones ni acupuntura en el ultimo año.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No haberse aplicado vacunas un mes antes',
+                                          '⚪ No haberse aplicado vacunas un mes antes.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No venir desvelado (8 horas de sueño)',
+                                          '⚪ No venir desvelado (8 horas de sueño).',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'Acudir con un mínimo de ayuno de 8 horas (lácteos, carnes, grasas)',
+                                          '⚪ Acudir con un mínimo de ayuno de 8 horas (lácteos, carnes, grasas).',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No ser usuario de drogas de ninguna clase',
+                                          '⚪ No ser usuario de drogas de ninguna clase.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No haber recibido transfusiones',
+                                          '⚪ No haber recibido transfusiones.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No practicar la prostitución',
+                                          '⚪ No practicar la prostitución.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No tener más de una pareja sexual',
+                                          '⚪ No tener más de una pareja sexual.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'No ser homosexual ni bisexual',
+                                          '⚪ No ser homosexual ni bisexual.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'Disponer de un mínimo de 2 a 3 horas para los exámenes y la donación',
+                                          '⚪ Disponer de un mínimo de 2 a 3 horas para los exámenes y la donación.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                       ListTile(
                                         title: Text(
-                                          'Estatura mínima de 150 cm',
+                                          '⚪ Estatura mínima de 150 cm.',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
@@ -1199,7 +1199,7 @@ class HomePage extends ConsumerWidget {
                         String description;
                         return AlertDialog(
                           scrollable: true,
-                          title: Text("Solicitud Para Donación"),
+                          title: Text("Solicitud para donación"),
                           content: StatefulBuilder(builder:
                               (BuildContext context, StateSetter setState) {
                             return Column(
@@ -1263,7 +1263,7 @@ class HomePage extends ConsumerWidget {
                                               padding: const EdgeInsets.only(
                                                   left: 0.0),
                                               child: const Text(
-                                                "Tipo De Sangre",
+                                                "Tipo de sangre",
                                                 style: const TextStyle(
                                                     color: Colors.red,
                                                     fontSize: 16.0),
@@ -1407,18 +1407,19 @@ class HomePage extends ConsumerWidget {
                       });
                 },
                 child: Icon(Icons.add),
+                tooltip: 'Solicitar',
               )
             : null,
         bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.format_list_bulleted),
-                label: 'Solicitar Sangre',
+                label: 'Solicitar sangre',
                 backgroundColor: Colors.red,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.card_giftcard_outlined),
-                label: 'Donar Sangre',
+                label: 'Donar sangre',
                 backgroundColor: Colors.red,
               ),
               BottomNavigationBarItem(
