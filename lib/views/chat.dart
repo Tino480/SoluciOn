@@ -29,7 +29,7 @@ class ChatPage extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("RedBlood Chat"),
+          title: const Text("REDBLOOD"),
           centerTitle: true,
           actions: <Widget>[
             Row(
@@ -85,7 +85,7 @@ class ChatPage extends ConsumerWidget {
                     child: TextField(
                       onSubmitted: (value) => callback(),
                       decoration: const InputDecoration(
-                        hintText: "Escribe tu Mensaje...",
+                        hintText: "Escribe tu mensaje...",
                         border: const OutlineInputBorder(),
                       ),
                       controller: messageController,
